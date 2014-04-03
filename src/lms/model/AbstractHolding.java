@@ -4,105 +4,119 @@ package lms.model;
  * @author Greg Kappatos
  */
 
-public abstract class AbstractHolding implements Holding {
+public abstract class AbstractHolding implements Holding
+{
 
-	private int code;
-	private String title;	
-	private int maxLoanPeriod;
-	private String borrowDate;	
-	private int standardLoanFee;
-	private String type;	
-	
-	public AbstractHolding(int code, String title, int standardLoanFee, int maxLoadPeriod, String type){
-		
-		this.code = code;
-		this.title = title;
-		this.standardLoanFee = standardLoanFee;
-		this.maxLoanPeriod = maxLoadPeriod;
-		this.type = type;
-		
-	}
-	
-	///////////////////////////////////////////////////////////////////
-	// Holding implementation /////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////	
+   private int code;
+   private String title;
+   private int maxLoanPeriod;
+   private String borrowDate;
+   private int standardLoanFee;
+   private String type;
 
-	@Override
-	public abstract int calculateLateFee();		
-	
-	@Override
-	public String getType(){
-		
-		return this.type;
-		
-	}
-	
-	@Override
-	public String getBorrowDate() { 
-		
-		return this.borrowDate;
-		
-	}
+   public AbstractHolding(int code, String title, int standardLoanFee,
+                          int maxLoadPeriod, String type)
+   {
 
-	@Override
-	public int getCode() { 
-		
-		return this.code;
-		
-	}
+      this.code = code;
+      this.title = title;
+      this.standardLoanFee = standardLoanFee;
+      this.maxLoanPeriod = maxLoadPeriod;
+      this.type = type;
 
-	@Override
-	public int getDefaultLoanFee() {
-		
-		return this.standardLoanFee;
-		
-	}
+   }
 
-	@Override
-	public int getMaxLoanPeriod() {
-		
-		return this.maxLoanPeriod;
-		
-	}
+   // /////////////////////////////////////////////////////////////////
+   // Holding implementation /////////////////////////////////////////
+   // /////////////////////////////////////////////////////////////////
 
-	@Override
-	public String getTitle() { 
-		
-		return this.title;
-		
-	}
+   @Override
+   public abstract int calculateLateFee();
 
-	@Override
-	public boolean isOnLoan() {	
-		
-		// Use the date to determine if this Holding is on loan.
-		return this.borrowDate != null;	
-		
-	}
+   @Override
+   public String getType()
+   {
 
-	@Override
-	public void setBorrowDate(String newDate) {
-		
-		this.borrowDate = newDate;
-		
-	}
-	
-	///////////////////////////////////////////////////////////////////
-	// Object /////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////
-	
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		
-		return super.clone();
-		
-	}
-	
-	@Override
-	public String toString(){
-		
-		return String.format("%s:%s:%s", this.code, this.title, this.standardLoanFee);
-		
-	}
+      return this.type;
+
+   }
+
+   @Override
+   public String getBorrowDate()
+   {
+
+      return this.borrowDate;
+
+   }
+
+   @Override
+   public int getCode()
+   {
+
+      return this.code;
+
+   }
+
+   @Override
+   public int getDefaultLoanFee()
+   {
+
+      return this.standardLoanFee;
+
+   }
+
+   @Override
+   public int getMaxLoanPeriod()
+   {
+
+      return this.maxLoanPeriod;
+
+   }
+
+   @Override
+   public String getTitle()
+   {
+
+      return this.title;
+
+   }
+
+   @Override
+   public boolean isOnLoan()
+   {
+
+      // Use the date to determine if this Holding is on loan.
+      return this.borrowDate != null;
+
+   }
+
+   @Override
+   public void setBorrowDate(String newDate)
+   {
+
+      this.borrowDate = newDate;
+
+   }
+
+   // /////////////////////////////////////////////////////////////////
+   // Object /////////////////////////////////////////////////////////
+   // /////////////////////////////////////////////////////////////////
+
+   @Override
+   public Object clone() throws CloneNotSupportedException
+   {
+
+      return super.clone();
+
+   }
+
+   @Override
+   public String toString()
+   {
+
+      return String.format("%s:%s:%s", this.code, this.title,
+                           this.standardLoanFee);
+
+   }
 
 }
