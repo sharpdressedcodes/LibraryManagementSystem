@@ -1,5 +1,9 @@
 package lms.model;
 
+/**
+ * @author Greg Kappatos
+ */
+
 public interface Holding extends Cloneable {
 	
 	public int calculateLateFee();
@@ -12,6 +16,9 @@ public interface Holding extends Cloneable {
 	public void setBorrowDate(String newDate);	
 	public String getType(); //custom
 	
-	//cloneable
+	///////////////////////////////////////////////////////////////////
+	// Cloneable //////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////
+	
 	public Object clone() throws CloneNotSupportedException;
 }

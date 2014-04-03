@@ -1,5 +1,9 @@
 package lms.model;
 
+/**
+ * @author Greg Kappatos
+ */
+
 public abstract class AbstractHolding implements Holding {
 
 	private int code;
@@ -10,67 +14,95 @@ public abstract class AbstractHolding implements Holding {
 	private String type;	
 	
 	public AbstractHolding(int code, String title, int standardLoanFee, int maxLoadPeriod, String type){
+		
 		this.code = code;
 		this.title = title;
 		this.standardLoanFee = standardLoanFee;
 		this.maxLoanPeriod = maxLoadPeriod;
 		this.type = type;
+		
 	}
 	
-	// holding
+	///////////////////////////////////////////////////////////////////
+	// Holding implementation /////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////	
+
 	@Override
 	public abstract int calculateLateFee();		
 	
 	@Override
 	public String getType(){
+		
 		return this.type;
+		
 	}
 	
 	@Override
 	public String getBorrowDate() { 
+		
 		return this.borrowDate;
+		
 	}
 
 	@Override
 	public int getCode() { 
+		
 		return this.code;
+		
 	}
 
 	@Override
 	public int getDefaultLoanFee() {
+		
 		return this.standardLoanFee;
+		
 	}
 
 	@Override
 	public int getMaxLoanPeriod() {
+		
 		return this.maxLoanPeriod;
+		
 	}
 
 	@Override
 	public String getTitle() { 
+		
 		return this.title;
+		
 	}
 
 	@Override
-	public boolean isOnLoan() {		
-		return this.borrowDate != null;		
+	public boolean isOnLoan() {	
+		
+		// Use the date to determine if this Holding is on loan.
+		return this.borrowDate != null;	
+		
 	}
 
 	@Override
 	public void setBorrowDate(String newDate) {
+		
 		this.borrowDate = newDate;
+		
 	}
 	
-	// cloneable
+	///////////////////////////////////////////////////////////////////
+	// Object /////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////
+	
 	@Override
 	public Object clone() throws CloneNotSupportedException {
+		
 		return super.clone();
+		
 	}
 	
-	// object
 	@Override
 	public String toString(){
+		
 		return String.format("%s:%s:%s", this.code, this.title, this.standardLoanFee);
+		
 	}
 
 }

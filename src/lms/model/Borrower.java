@@ -1,5 +1,9 @@
 package lms.model;
 
+/**
+ * @author Greg Kappatos
+ */
+
 import lms.model.exception.*;
 
 public interface Borrower {

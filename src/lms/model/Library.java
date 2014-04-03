@@ -1,5 +1,9 @@
 package lms.model;
 
+/**
+ * @author Greg Kappatos
+ */
+
 import lms.model.exception.*;
 
 public class Library {
@@ -29,6 +33,8 @@ public class Library {
 		
 		Holding holding = this.getHolding(code);		
 		
+		// Make sure the Holding exists before trying to borrow it.
+		// Maybe throwing a HoldingNotFoundException would be better?
 		if (holding != null)			
 			this.member.borrowHolding(holding);		
 		
@@ -93,6 +99,8 @@ public class Library {
 		boolean result = false;		
 		Holding holding = this.libraryCollection.getHolding(code);
 		
+		// Make sure the Holding exists before trying to remove it.
+		// Maybe throwing a HoldingNotFoundException would be better?		
 		if (holding != null)
 			result = this.libraryCollection.removeHolding(holding);
 						
@@ -110,6 +118,8 @@ public class Library {
 		
 		Holding holding = this.getHolding(code);		
 		
+		// Make sure the Holding exists before trying to borrow it.
+		// Maybe throwing a HoldingNotFoundException would be better?
 		if (holding != null)						
 			this.member.returnHolding(holding);				
 		

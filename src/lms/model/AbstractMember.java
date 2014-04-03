@@ -1,5 +1,9 @@
 package lms.model;
 
+/**
+ * @author Greg Kappatos
+ */
+
 import java.util.*;
 
 import lms.model.exception.*;
@@ -27,29 +31,38 @@ public abstract class AbstractMember implements Member {
 		
 	}
 	
-	// from Borrower interface
+	///////////////////////////////////////////////////////////////////
+	// Borrower implementation ////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////
+	
 	@Override
 	public void borrowHolding(Holding holding) throws InsufficientCreditException, MultipleBorrowingException {				
 			
 		int fee = holding.getDefaultLoanFee();
 		
+		// Is this Holding already on loan?
+		// Or has this Holding already been borrowed?
 		if (this.currentLoans.containsKey(holding.getCode()) || this.history.getHistoryRecord(holding.getCode()) != null)
 			throw new MultipleBorrowingException();
 		
+		// Can the member afford to borrow this Holding?
 		else if (this.getRemainingCredit() < fee)
 			throw new InsufficientCreditException();
 						
+		// All clear, go ahead and borrow.
 		this.calculateRemainingCredit(fee);
-		holding.setBorrowDate(DateUtil.getInstance().getDate());
-				
+		// Setting date to not null puts Holding into 'on loan' state.
+		holding.setBorrowDate(DateUtil.getInstance().getDate());				
 		this.currentLoans.put(holding.getCode(), holding);
 				
 	}
 
 	public abstract void returnHolding(Holding holding) throws OverdrawnCreditException;
-
 	
-	// from Member interface
+	///////////////////////////////////////////////////////////////////
+	// Member implementation //////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////
+	
 	@Override
 	public int calculateRemainingCredit(int creditToSubtract) {
 		
@@ -61,12 +74,16 @@ public abstract class AbstractMember implements Member {
 
 	@Override
 	public String getType(){
+		
 		return this.type;
+		
 	}
 	
 	@Override
 	public int getRemainingCredit(){
+		
 		return this.remainingCredit;
+		
 	}
 	
 	@Override
@@ -78,32 +95,49 @@ public abstract class AbstractMember implements Member {
 
 	@Override
 	public Holding[] getCurrentHoldings() {
+		
+		// Only return an array if the list isn't empty.
 		return this.currentLoans.size() == 0 ? null : this.currentLoans.values().toArray(new Holding[this.currentLoans.size()]);
+		
 	}
 
 	@Override
 	public String getFullName() {	
+		
 		return this.fullName;
+		
 	}
 
 	@Override
 	public int getMaxCredit() {
+		
 		return this.maxCredit;
+		
 	}
 
 	@Override
-	public String getMemberId() {		
+	public String getMemberId() {	
+		
 		return this.id;
+		
 	}
 
 	@Override
 	public void resetCredit() {
+		
 		this.remainingCredit = this.maxCredit;
+		
 	}
+	
+	///////////////////////////////////////////////////////////////////
+	// Object /////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////
 	
 	@Override
 	public String toString(){		
+		
 		return String.format("%s:%s:%s", this.id, this.fullName, this.remainingCredit);
+		
 	}
 
 }

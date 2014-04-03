@@ -10,7 +10,9 @@ import lms.model.util.DateUtil;
 
 /**
  * @author Mikhail Perepletchikov
+ * @author Greg Kappatos (modified by)
  */
+
 public class LMSFacade implements LMSModel {	
 
 	private Library library;
@@ -20,6 +22,15 @@ public class LMSFacade implements LMSModel {
 		this.library = new Library();
 		
 	}
+
+	//this shows an example of using the provided DateUtil class to set the current date
+	public void setDate(String currentDate) {
+		DateUtil.getInstance().setDate(currentDate);
+	}
+	
+	///////////////////////////////////////////////////////////////////
+	// LMSModel implementation ////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////
 	
 	@Override
 	public void addMember(Member member) {
@@ -145,11 +156,6 @@ public class LMSFacade implements LMSModel {
 		
 		return this.library.calculateTotalLateFees();
 		
-	}
-	
-	// this shows an example of using the provided DateUtil class to set the current date
-	public void setDate(String currentDate) {
-		DateUtil.getInstance().setDate(currentDate);
 	}
 	
 }
