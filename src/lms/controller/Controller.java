@@ -60,14 +60,14 @@ public class Controller {
 	}
 	public void removeHolding(int holdingId){
 		
-		if (showConfirmDialog(String.format("Permanently remove %s?", holdingId))){
+		if (showConfirmDialog(String.format("Permanently remove this %s?\n%s", formatHoldingType(this.model.getHolding(holdingId).getType()), holdingId))){
 		
 			this.model.removeHolding(holdingId);			
 			updateDisplay();
 			
 		}
 		
-	}
+	}	
 	public void removeBooks(){
 		
 		HoldingVisitor visitor = new HoldingVisitor();
@@ -93,11 +93,12 @@ public class Controller {
 	public void removeHoldings(Holding[] holdings){
 		
 		String[] holdingStrings = new String[holdings.length];
+		String type = formatHoldingType(holdings[0].getType());
 		
 		for (int i = 0; i < holdings.length; i++)
 			holdingStrings[i] = holdings[i].toString().substring(0, holdings[i].toString().lastIndexOf(':'));
-				
-		RemoveHoldingsDialog dialog = new RemoveHoldingsDialog(this.mainView, holdingStrings);
+							
+		RemoveHoldingsDialog dialog = new RemoveHoldingsDialog(this.mainView, type, holdingStrings);
 		
 		if (dialog.getResult().equals(AbstractDialog.Actions.OK)){
 			
@@ -110,7 +111,7 @@ public class Controller {
 			if (sb.length() > 0)
 				sb.deleteCharAt(sb.length() - 1);
 			
-			if (showConfirmDialog(String.format("Permanently remove these holdings?\n(%s)", sb.toString()))){
+			if (showConfirmDialog(String.format("Permanently remove these %ss?\n(%s)", type, sb.toString()))){
 				
 				for (int holdingId : holdingIds)		
 					this.model.removeHolding(holdingId);
@@ -175,26 +176,13 @@ public class Controller {
 	}
 	public GridCell[] getHoldingCells(){
 		
-		// get all holdings from the Model
-    Holding[] temp = model.getAllHoldings();
-
-    // initialise array of grid cells to cover retrieved holdings
-    GridCell[] cells = new HoldingCell[temp.length];
-
-    
-    //HoldingCellVisitor visitor = new HoldingCellVisitor();
-    //for (HoldingCell cell : temp)
-    
-    // extract data from holdings and create appropriate grid cells
-    for (int i = 0; i < temp.length; i++) {
-        // use the Visitor pattern instead +1 BONUS MARK
-        if (temp[i].getClass().getSimpleName().equals("Book"))
-            cells[i] = new BookCell(temp[i].toString());
-        else
-            cells[i] = new VideoCell(temp[i].toString());
-    }
+		Holding[] holdings = model.getAllHoldings();
+		HoldingVisitor visitor = new HoldingVisitor();
+		
+		for (Holding holding : holdings)
+			holding.accept(visitor);				
         
-    return cells;
+    return visitor.getCells();
 		
 	}
 	public GridCell[] sortHoldingCells(GridCell[] cells){				
@@ -281,6 +269,16 @@ public class Controller {
 		//this.mainView.toggleControls(false);
 		this.mainView.clearLibraryGrid();
 		this.mainView.updateStatusBar(getStatusData());
+		
+	}
+	public String formatHoldingType(String holdingId){
+		
+		// Convert STRING or string to String
+		return String.format(
+				"%s%s", 
+				holdingId.substring(0, 1).toUpperCase(), 
+				holdingId.substring(1).toLowerCase()
+		);
 		
 	}
 	public void handleExitAction(){
