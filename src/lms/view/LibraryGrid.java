@@ -1,8 +1,11 @@
 package lms.view;
 
 import java.awt.*;
+
 import javax.swing.JPanel;
+
 import lms.controller.LibraryGridController;
+import lms.model.grid.cells.visitor.HoldingCellVisitor;
 import lms.view.grid.cells.*;
 
 @SuppressWarnings("serial")
@@ -23,17 +26,19 @@ public class LibraryGrid extends JPanel {
 	public void update(GridCell[] cells){	
 		
 		this.removeAll();
-		this.setLayout(new GridLayout(0, LibraryGridController.MAX_CELLS_PER_COLUMN, 1, 1));					
+		this.setLayout(new GridLayout(0, LibraryGridController.MAX_CELLS_PER_COLUMN, 1, 1));							
 		
-		for (GridCell cell : cells)
-			this.add(cell);
+		HoldingCellVisitor visitor = new HoldingCellVisitor();
 		
-		// TODO: visitor pattern				
 		for (GridCell cell : cells){
-			if (cell instanceof HoldingCell){
-				((HoldingCell) cell).getLabel().addMouseListener(this.controller);
-			}
+			cell.accept(visitor);
+			this.add(cell);
 		}
+		
+		HoldingCell[] holdingCells = visitor.getHoldingCells();		
+		
+		for (HoldingCell cell : holdingCells)
+			cell.getLabel().addMouseListener(controller);
 		
 		// This is here because it wasn't removing all the cells
 		// on the last row, when an item has been removed.

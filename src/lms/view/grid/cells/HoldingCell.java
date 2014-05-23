@@ -5,8 +5,11 @@ import java.util.Comparator;
 
 import javax.swing.*;
 
+import lms.model.grid.cells.visitor.Visitable;
+import lms.model.grid.cells.visitor.Visitor;
+
 @SuppressWarnings("serial")
-public abstract class HoldingCell extends GridCell {
+public abstract class HoldingCell extends GridCell implements Visitable {
 
 	private String holdingInfo;
 	private JLabel lbl;
@@ -110,4 +113,11 @@ public abstract class HoldingCell extends GridCell {
 		
 	}
 
+	@Override
+	public void accept(Visitor visitor) {
+		
+		visitor.visit(this);
+		
+	}
+	
 }

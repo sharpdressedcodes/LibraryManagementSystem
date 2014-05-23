@@ -1,7 +1,6 @@
 package lms.view.grid.cells;
 
 import java.awt.Color;
-
 import javax.swing.BorderFactory;
 
 @SuppressWarnings("serial")
