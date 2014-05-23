@@ -16,7 +16,7 @@ public abstract class HoldingCell extends GridCell implements Visitable {
 	private String holdingId;
 	private String holdingType;
 		
-	public final String DEFAULT_FORMAT = "<html>Holding ID: %s<br><br>Title: %s<br><br>Standard Loan Fee: %s<br><br>Loan Period: %s</html>";
+	public static final String DEFAULT_FORMAT = "<html>Holding ID: %s<br><br>Title: %s<br><br>Standard Loan Fee: %s<br><br>Loan Period: %s</html>";
 	
 	public HoldingCell(String holdingInfo){
 		
@@ -107,7 +107,7 @@ public abstract class HoldingCell extends GridCell implements Visitable {
 		this.holdingId = holdingId;
 		
 		return String.format(
-				this.DEFAULT_FORMAT, 
+				DEFAULT_FORMAT, 
 				holdingId, holdingTitle, holdingFee, holdingPeriod
 		);
 		

@@ -18,7 +18,7 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 	//private JPanel pnlContent;
 	private JFrame frame; 
 	
- 	public enum Actions {
+ 	public static enum Actions {
 		OK,
 		Cancel
 	}

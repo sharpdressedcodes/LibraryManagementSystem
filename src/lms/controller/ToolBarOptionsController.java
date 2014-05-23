@@ -10,7 +10,7 @@ public class ToolBarOptionsController implements ActionListener {
 
 	private MainView mainView;
 	
-	public enum SortActions {
+	public static enum SortActions {
 		none,
 		code,
 		type
