@@ -2,32 +2,22 @@ package lms.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JOptionPane;
-import lms.model.facade.LMSModel;
-import lms.view.LibraryGrid;
 import lms.view.MainView;
-//import lms.model.facade.LMSModel;
-//import lms.view.MainView;
 import lms.view.MenuBar;
-import lms.view.grid.cells.BookCell;
-import lms.view.grid.cells.EmptyCell;
-import lms.view.grid.cells.GridCell;
-import lms.view.grid.cells.VideoCell;
-import lms.view.test.Tester;
 
 public class MenuBarController implements ActionListener {
 
-	private LMSModel model;
+	//private LMSModel model;
 	private MainView mainView;
 	private Controller helper;
-	private MenuBar menuBar;
+	//private MenuBar menuBar;
 	
 	public MenuBarController(MenuBar menuBar) {
 		
-		this.menuBar = menuBar;
+		//this.menuBar = menuBar;
 		this.mainView = menuBar.getMainView();
-		this.model = this.mainView.getModel();
+		//this.model = this.mainView.getModel();
 		this.helper = new Controller(this.mainView);
 		
 	}
@@ -89,7 +79,7 @@ public class MenuBarController implements ActionListener {
 	}
 	public void handleRemoveBookAction(ActionEvent e){
 		
-		helper.removeHoldings(new int[] {1000091});
+		helper.removeBooks();
 		
 	}
 	public void handleAddVideoAction(ActionEvent e){
@@ -99,7 +89,7 @@ public class MenuBarController implements ActionListener {
 	}
 	public void handleRemoveVideoAction(ActionEvent e){
 		
-		helper.removeHoldings(new int[] {2020091});
+		helper.removeVideos();
 		
 	}
 	public void handleAboutAction(ActionEvent e){

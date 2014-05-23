@@ -2,26 +2,21 @@ package lms.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import lms.model.Holding;
-import lms.model.LibraryCollection;
 import lms.model.facade.LMSModel;
-import lms.view.LibraryGrid;
 import lms.view.MainView;
 import lms.view.ToolBar;
-import lms.view.grid.cells.*;
-import lms.view.test.Tester;
 
 public class ToolBarButtonsController implements ActionListener {
 
-	private ToolBar toolBar;
+	//private ToolBar toolBar;
 	private LMSModel model;
 	private MainView mainView;
 	private Controller helper;
 	
 	public ToolBarButtonsController(ToolBar toolBar) {
 		
-		this.toolBar = toolBar;
+		//this.toolBar = toolBar;
 		this.mainView = toolBar.getMainView();
 		this.model = this.mainView.getModel();
 		this.helper = new Controller(this.mainView);
@@ -78,8 +73,7 @@ public class ToolBarButtonsController implements ActionListener {
 	}
 	public void handleRemoveBookAction(ActionEvent e){
 		
-		// TODO: sort removeBookAction - get bookId
-		helper.removeHoldings(new int[] {1000091});
+		helper.removeBooks();
 		
 	}
 	public void handleAddVideoAction(ActionEvent e){
@@ -89,8 +83,7 @@ public class ToolBarButtonsController implements ActionListener {
 	}
 	public void handleRemoveVideoAction(ActionEvent e){
 		
-		// TODO: sort removeVideoAction - get videoId
-		helper.removeHoldings(new int[] {2020091});
+		helper.removeVideos();
 		
 	}
 	

@@ -1,28 +1,22 @@
 package lms.view;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import javax.swing.JPanel;
-
 import lms.controller.LibraryGridController;
-import lms.controller.ToolBarOptionsController;
-import lms.model.facade.LMSFacade;
-import lms.model.facade.LMSModel;
 import lms.view.grid.cells.*;
 
 @SuppressWarnings("serial")
 public class LibraryGrid extends JPanel {
 
-	private MainView mainView;	
+	//private MainView mainView;	
 	private LibraryGridController controller;
 	
 	public LibraryGrid(MainView view) {
 		
 		this.controller = new LibraryGridController(view);
-		this.setBackground(Color.WHITE);
-		this.mainView = view;
+		//this.mainView = view;
+		
+		this.setBackground(Color.WHITE);		
 		
 	}
 	
@@ -50,8 +44,8 @@ public class LibraryGrid extends JPanel {
 	public void refresh(GridCell[] cells){
 		
 		this.removeAll();		
-		this.setLayout(new GridLayout(0, LibraryGridController.MAX_CELLS_PER_COLUMN, 1, 1));
 		
+		// Just add the cells without adding listener.
 		for (GridCell cell : cells)
 			this.add(cell);
 		

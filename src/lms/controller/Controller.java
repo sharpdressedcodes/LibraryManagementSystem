@@ -1,17 +1,16 @@
 package lms.controller;
 
 import java.util.*;
-
 import javax.swing.JOptionPane;
-
 import lms.model.Book;
 import lms.model.Holding;
 import lms.model.LibraryCollection;
 import lms.model.Video;
 import lms.model.facade.LMSModel;
-import lms.model.grid.cells.visitor.HoldingCellVisitor;
-import lms.view.LibraryGrid;
+import lms.model.visitor.HoldingVisitor;
 import lms.view.MainView;
+import lms.view.dialog.AbstractDialog;
+import lms.view.dialog.RemoveHoldingsDialog;
 import lms.view.grid.cells.*;
 import lms.view.test.Tester;
 
@@ -61,21 +60,75 @@ public class Controller {
 	}
 	public void removeHolding(int holdingId){
 		
-		// TODO: confirmation
+		if (showConfirmDialog(String.format("Permanently remove %s?", holdingId))){
 		
-		this.model.removeHolding(holdingId);
-		
-		updateDisplay();
+			this.model.removeHolding(holdingId);			
+			updateDisplay();
+			
+		}
 		
 	}
-	public void removeHoldings(int[] holdingIds){
+	public void removeBooks(){
 		
-		// TODO: confirmation
+		HoldingVisitor visitor = new HoldingVisitor();
+		Holding[] holdings = this.model.getAllHoldings();
 		
-		for (int holdingId : holdingIds)
-			this.model.removeHolding(holdingId);
+		for (Holding holding : holdings)
+	  		 holding.accept(visitor);
 		
-		updateDisplay();
+		removeHoldings(visitor.getBooks());
+		
+	}
+	public void removeVideos(){
+		
+		HoldingVisitor visitor = new HoldingVisitor();
+		Holding[] holdings = this.model.getAllHoldings();
+		
+		for (Holding holding : holdings)
+	  		 holding.accept(visitor);
+		
+		removeHoldings(visitor.getVideos());
+		
+	}
+	public void removeHoldings(Holding[] holdings){
+		
+		String[] holdingStrings = new String[holdings.length];
+		
+		for (int i = 0; i < holdings.length; i++)
+			holdingStrings[i] = holdings[i].toString().substring(0, holdings[i].toString().lastIndexOf(':'));
+				
+		RemoveHoldingsDialog dialog = new RemoveHoldingsDialog(this.mainView, holdingStrings);
+		
+		if (dialog.getResult().equals(AbstractDialog.Actions.OK)){
+			
+			int[] holdingIds = dialog.getSelectedHoldingIds();
+			StringBuffer sb = new StringBuffer();
+			
+			for (int holdingId : holdingIds)
+				sb.append(String.format("%s,", holdingId));
+			
+			if (sb.length() > 0)
+				sb.deleteCharAt(sb.length() - 1);
+			
+			if (showConfirmDialog(String.format("Permanently remove these holdings?\n(%s)", sb.toString()))){
+				
+				for (int holdingId : holdingIds)		
+					this.model.removeHolding(holdingId);
+
+				updateDisplay();
+				
+			}
+						
+		}			
+		
+	}
+	public boolean showConfirmDialog(String message){
+		
+		return JOptionPane.showConfirmDialog(
+				this.mainView, message, 
+				"Confirmation", 
+				JOptionPane.QUESTION_MESSAGE & JOptionPane.OK_CANCEL_OPTION
+		) == JOptionPane.OK_OPTION;
 		
 	}
 	public boolean addLibraryCollection(){
@@ -102,12 +155,7 @@ public class Controller {
 		
 		if (cells != null && 
 				cells.length > 0 && 
-				JOptionPane.showConfirmDialog(
-						this.mainView, 
-						"Reset Library Collection", 
-						"Confirmation", 
-						JOptionPane.QUESTION_MESSAGE & JOptionPane.OK_CANCEL_OPTION
-				) == JOptionPane.OK_OPTION){
+				showConfirmDialog("Reset Library Collection?")){
 										
 				this.model.addCollection(new LibraryCollection(
 						this.model.getCollection().getCode(), 
@@ -209,7 +257,6 @@ public class Controller {
         String.valueOf(model.countVideos())
      };
 	}
-
 	public void updateDisplay(){
 		
 		if (this.model.getCollection().countBooks() == 0 && this.model.getCollection().countVideos() == 0){
@@ -231,19 +278,15 @@ public class Controller {
 	}
 	public void clearDisplay(){
 		
+		//this.mainView.toggleControls(false);
 		this.mainView.clearLibraryGrid();
 		this.mainView.updateStatusBar(getStatusData());
 		
 	}
 	public void handleExitAction(){
 		
-//	if (JOptionPane.showConfirmDialog(
-//	this.mainView, 
-//	"Are you sure you wish to exit the application?", 
-//	"Confirmation", 
-//	JOptionPane.QUESTION_MESSAGE & JOptionPane.YES_NO_OPTION
-//	) == JOptionPane.YES_OPTION)
-	System.exit(0);
+	if (showConfirmDialog("Are you sure you wish to exit the application?"))
+		System.exit(0);
 
 	}
 }

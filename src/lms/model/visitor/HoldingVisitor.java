@@ -3,50 +3,50 @@ package lms.model.visitor;
 import java.util.LinkedHashMap;
 
 import lms.model.Book;
-import lms.model.Holding;
 import lms.model.Video;
 
 public class HoldingVisitor implements Visitor {
 
-	private int bookCount;
-	private int videoCount;
-	private LinkedHashMap<String, Holding> holdings;
+	private LinkedHashMap<Integer, Book> books;
+	private LinkedHashMap<Integer, Video> videos;
 	
 	public HoldingVisitor() {
 		
-		this.bookCount = 0;
-		this.videoCount = 0;
+		books = new LinkedHashMap<Integer, Book>();
+		videos = new LinkedHashMap<Integer, Video>();
 		
 	}
 
-	public Holding[] getHoldings(){
+	public Book[] getBooks(){
 		
-		return this.holdings.entrySet().toArray(new Holding[this.holdings.size()]);
+		return books.values().toArray(new Book[books.size()]);
 		
-	}
-	
+	}	
+	public Video[] getVideos(){
+		
+		return videos.values().toArray(new Video[videos.size()]);
+		
+	}	
 	public int getBookCount(){
 		
-		return this.bookCount;
+		return books.size();
 		
 	}
 	public int getVideoCount(){
 		
-		return this.videoCount;
+		return videos.size();
 		
 	}
 	@Override
 	public void visit(Book book) {
-		
-		this.bookCount++;
-		//this.holdings.put(book.getClass().getSimpleName(), book);
+				
+		books.put(books.size(), book);
 
 	}
 	@Override
 	public void visit(Video video) {
 		
-		this.videoCount++;
-		//this.holdings.put(video.getClass().getSimpleName(), video);
+		videos.put(videos.size(), video);
 
 	}
 

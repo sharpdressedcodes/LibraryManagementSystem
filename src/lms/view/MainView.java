@@ -2,7 +2,6 @@ package lms.view;
 
 import java.awt.BorderLayout;
 import java.awt.HeadlessException;
-import java.awt.event.*;
 
 import javax.swing.JFrame;
 
@@ -38,17 +37,15 @@ public class MainView extends JFrame {
 		this.helper = new Controller(this);
 		this.cells = null;
 		this.sortOrder = ToolBarOptionsController.SortActions.none.ordinal();
-				
-		//this.pack();
-		this.setSize(800,  600);
-		this.setLocationRelativeTo(null);
-		
+						
 		this.setLayout(new BorderLayout());
 		
 		this.menuBar = new MenuBar(this);
 		this.toolBar = new ToolBar(this);
 		this.libraryGrid = new LibraryGrid(this);
 		this.statusBar = new StatusBar(this);
+		
+		updateStatusBar(new String[] {"-", "0", "0"});
 		
 		this.setJMenuBar(this.menuBar);
 
@@ -58,6 +55,12 @@ public class MainView extends JFrame {
 		this.add(this.toolBar, BorderLayout.NORTH);
 		this.add(this.libraryGrid, BorderLayout.CENTER);
 		this.add(this.statusBar, BorderLayout.SOUTH);
+		
+		//this.toggleControls(false);
+		
+		this.pack();
+		this.setSize(this.getWidth(), this.getHeight() + 500);
+		this.setLocationRelativeTo(null);
 		
 	}
 	public LMSModel getModel(){
@@ -127,6 +130,7 @@ public class MainView extends JFrame {
 	}
 	public void updateLibraryGrid(GridCell[] cells){
 		
+		//this.toggleControls(true);
 		this.libraryGrid.update(cells);
 		this.validate();
 		
@@ -134,12 +138,18 @@ public class MainView extends JFrame {
 	public void updateStatusBar(String[] data){
 		
 		this.statusBar.setText(String.format(
-				this.STATUSBAR_FORMAT, 
+				STATUSBAR_FORMAT, 
 				data[0],
 				data[1],
 				data[2]
 		));
 		this.validate();
+		
+	}
+	public void toggleControls(boolean enabled){
+		
+		//this.toolBar.toggle(enabled);
+		//this.menuBar.toggle(enabled);
 		
 	}
 }

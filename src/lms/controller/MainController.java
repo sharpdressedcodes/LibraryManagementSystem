@@ -2,19 +2,18 @@ package lms.controller;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import lms.model.facade.LMSModel;
 import lms.view.MainView;
 
 public class MainController extends WindowAdapter {
 
-	private LMSModel model;
-	private MainView mainView;
+	//private LMSModel model;
+	//private MainView mainView;
 	private Controller helper;
 	
 	public MainController(MainView view) {
 		
-		this.mainView = view;
-		this.model = this.mainView.getModel();
+		//this.mainView = view;
+		//this.model = this.mainView.getModel();
 		this.helper = new Controller(view);
 		
 	}

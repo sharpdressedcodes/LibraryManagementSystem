@@ -3,14 +3,15 @@ package lms.view;
 import java.awt.*;
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class StatusBar extends JPanel {
 
 	private JLabel label;	
-	private MainView mainView;
+	//private MainView mainView;
 		
 	public StatusBar(MainView view) {
 		
-		this.mainView = view;				
+		//this.mainView = view;				
 		this.label = new JLabel("");
 		
 		this.setLayout(new FlowLayout(FlowLayout.LEFT));

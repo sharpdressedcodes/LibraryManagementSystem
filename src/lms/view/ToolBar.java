@@ -1,17 +1,13 @@
 package lms.view;
 
 import java.awt.*;
-import java.util.*;
-
 import javax.swing.*;
-
 import lms.controller.Controller;
-import lms.controller.MainController;
 import lms.controller.ToolBarButtonsController;
 import lms.controller.ToolBarOptionsController;
-import lms.model.facade.LMSModel;
 
-public class ToolBar extends JPanel {
+@SuppressWarnings("serial")
+public class ToolBar extends JPanel implements Toggleable {
 
 	private JPanel leftPanel;
 	private JPanel rightPanel;
@@ -133,5 +129,20 @@ public class ToolBar extends JPanel {
 	}
 	public ToolBarButtonsController getToolBarButtonsController(){
 		return this.buttonController;
+	}
+
+	// Toggleable implementation.
+	@Override
+	public void toggle(boolean state) {
+
+		this.cmdAddBook.setEnabled(state);
+		this.cmdRemoveBook.setEnabled(state);
+		this.cmdAddVideo.setEnabled(state);
+		this.cmdRemoveVideo.setEnabled(state);
+		
+		this.optNone.setEnabled(state);
+		this.optCode.setEnabled(state);
+		this.optType.setEnabled(state);
+		
 	}
 }

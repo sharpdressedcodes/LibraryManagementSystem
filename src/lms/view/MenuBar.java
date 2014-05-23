@@ -3,11 +3,10 @@ package lms.view;
 import javax.swing.*;
 
 import lms.controller.Controller;
-import lms.controller.MainController;
 import lms.controller.MenuBarController;
 
 @SuppressWarnings("serial")
-public class MenuBar extends JMenuBar {
+public class MenuBar extends JMenuBar implements Toggleable {
 
 	private MainView mainView;
 	private MenuBarController controller;
@@ -89,6 +88,13 @@ public class MenuBar extends JMenuBar {
 	public MainView getMainView(){
 
 		return this.mainView;
+		
+	}
+
+	// Toggleable implementation.
+	@Override
+	public void toggle(boolean state) {
+		// TODO Auto-generated method stub
 		
 	}
 }
