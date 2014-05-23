@@ -5,6 +5,7 @@ package lms.model;
  */
 
 import lms.model.util.DateUtil;
+import lms.model.visitor.Visitor;
 
 public class Video extends AbstractHolding
 {
@@ -41,9 +42,26 @@ public class Video extends AbstractHolding
    }
 
    // /////////////////////////////////////////////////////////////////
+   // Visitor ////////////////////////////////////////////////////////
+   // /////////////////////////////////////////////////////////////////
+   @Override
+   public void accept(Visitor visitor){
+  	 
+  	 visitor.visit(this);
+  	 
+   }
+   
+   // /////////////////////////////////////////////////////////////////
    // Object /////////////////////////////////////////////////////////
    // /////////////////////////////////////////////////////////////////
 
+   @Override
+   public Object clone(){
+  	   	 
+  	 return new Video(this.getCode(), this.getTitle(), this.getDefaultLoanFee());
+  	 
+   }
+   
    @Override
    public String toString()
    {

@@ -1,10 +1,12 @@
 package lms.model;
 
+import lms.model.visitor.Visitable;
+
 /**
  * @author Greg Kappatos
  */
 
-public interface Holding extends Cloneable
+public interface Holding extends Visitable
 {
 
    public int calculateLateFee();
@@ -24,10 +26,7 @@ public interface Holding extends Cloneable
    public void setBorrowDate(String newDate);
 
    public String getType(); // custom
+      
+   public Object clone();
 
-   // /////////////////////////////////////////////////////////////////
-   // Cloneable //////////////////////////////////////////////////////
-   // /////////////////////////////////////////////////////////////////
-
-   public Object clone() throws CloneNotSupportedException;
 }

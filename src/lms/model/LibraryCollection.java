@@ -6,6 +6,8 @@ package lms.model;
 
 import java.util.*;
 
+import lms.model.visitor.HoldingVisitor;
+
 public class LibraryCollection
 {
 
@@ -79,30 +81,24 @@ public class LibraryCollection
    public int countBooks()
    {
 
-      int result = 0;
-
-      // Loop through the Holdings, and search for Books
-      for (Map.Entry<Integer, Holding> entry : this.holdings.entrySet())
-         // Increment counter ONLY if this Holding is a Book
-         if (entry.getValue() instanceof Book)
-            result++;
-
-      return result;
+  	 HoldingVisitor visitor = new HoldingVisitor();
+  	 
+  	 for (Map.Entry<Integer, Holding> entry : this.holdings.entrySet())
+  		 entry.getValue().accept(visitor);
+  	 
+  	 return visitor.getBookCount();
 
    }
 
    public int countVideos()
    {
 
-      int result = 0;
-
-      // Loop through the Holdings, and search for Videos
-      for (Map.Entry<Integer, Holding> entry : this.holdings.entrySet())
-         // Increment counter ONLY if this Holding is a Video
-         if (entry.getValue() instanceof Video)
-            result++;
-
-      return result;
+  	 HoldingVisitor visitor = new HoldingVisitor();
+  	 
+  	 for (Map.Entry<Integer, Holding> entry : this.holdings.entrySet())
+  		 entry.getValue().accept(visitor);
+  	 
+  	 return visitor.getVideoCount();
 
    }
 

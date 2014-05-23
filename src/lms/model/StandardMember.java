@@ -33,28 +33,10 @@ public class StandardMember extends AbstractMember
       // Do they have enough credit?
       if (credit < fee)
          throw new OverdrawnCreditException();
-
+      
       // At this point all is OK to return the item.
-      try
-      {
-         // Clone the holding because the date is about to be set to null.
-         // This is to keep track of when it was borrowed.
-         this.history
-                  .addHistoryRecord(new HistoryRecord(
-                                                      (Holding) holding.clone(),
-                                                      holding.getDefaultLoanFee() +
-                                                               fee));
-      }
-      catch (CloneNotSupportedException ex)
-      {
-         System.err.println("Clone error: " + ex.getMessage());
-      }
-
-      // Set the date to null (this puts the item state in 'not on loan').
-      holding.setBorrowDate(null);
-      // Remove any late fees incurred.
-      this.calculateRemainingCredit(fee);
-      this.currentLoans.remove(holding.getCode());
+      else
+      	super.returnHolding(holding);
 
    }
 

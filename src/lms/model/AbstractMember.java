@@ -63,8 +63,28 @@ public abstract class AbstractMember implements Member
 
    }
 
-   public abstract void returnHolding(Holding holding)
-            throws OverdrawnCreditException;
+   @Override
+   public void returnHolding(Holding holding) throws OverdrawnCreditException
+   {
+
+      int fee = holding.calculateLateFee();
+
+      // Return the item, regardless of if the credit goes into negative.
+     
+     // Clone the holding because the date is about to be set to null.
+     // This is to keep track of when it was borrowed.
+     this.history.addHistoryRecord(new HistoryRecord(
+    		 (Holding) holding.clone(), 
+    		 holding.getDefaultLoanFee() + fee
+     ));
+
+      // Set the date to null (this puts the item state in 'not on loan').
+      holding.setBorrowDate(null);
+      // Remove any late fees incurred.
+      this.calculateRemainingCredit(fee);
+      this.currentLoans.remove(holding.getCode());
+
+   }
 
    // /////////////////////////////////////////////////////////////////
    // Member implementation //////////////////////////////////////////
