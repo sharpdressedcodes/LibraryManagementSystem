@@ -31,23 +31,11 @@ public class LengthInputVerifier extends InputVerifier {
 	// InputVerifier implementation.
 	@Override
 	public boolean verify(JComponent component) {
-		
-		int length = 0;
-		
-//		if (component.getClass().getSimpleName().equals("JFormattedTextField")){
-//			
-//			JFormattedTextField txt = (JFormattedTextField)component;
-//			length = txt.getText().length();
-//			
-//		} else if (component.getClass().getSimpleName().equals("JTextField")){
-				
-			JTextField txt = (JTextField)component;
-			length = txt.getText().length();
-			
-		//}
-		
+					
+		JTextField txt = (JTextField)component;
+		int length = txt.getText().length();					
 		boolean result = length >= minLength && (maxLength == 0 ? true : length <= maxLength);
-		
+
 		//txt.setBackground(result ? UIManager.getColor("TextField.background") : Color.decode(ERROR_COLOUR));
 		
 		return result;

@@ -18,7 +18,7 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 	private JPanel pnlContent;
 	private JFrame frame; 
 	
-	public static final int DEFAULT_TEXTFIELD_COLUMNS = 10;
+	public static final int DEFAULT_TEXTFIELD_COLUMNS = 20;
  	public static enum Actions {
 		OK,
 		Cancel
@@ -53,7 +53,6 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		pnlButtons = new JPanel();
 		pnlInnerButtons = new JPanel();
 
-		//pnlInnerButtons.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		pnlInnerButtons.add(cmdOk);
 		pnlInnerButtons.add(cmdCancel);
 		
@@ -61,10 +60,11 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		pnlButtons.add(pnlInnerButtons, BorderLayout.EAST);
 		
 		mainPanel.setLayout(new BorderLayout());
-		//mainPanel.setLayout(new GridLayout(2, 1));
+		mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		
 		pnlContent.setLayout(new GridLayout(0,1));
 		pnlContent.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
+		
 		
 		getRootPane().setDefaultButton(cmdOk);
 		
@@ -83,13 +83,9 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		
 		mainPanel.removeAll();
 		
-		//content.setLayout(new GridLayout(0,1));
-		//content.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
-		
-		mainPanel.add(content);//, BorderLayout.NORTH);
+		mainPanel.add(content);
 		mainPanel.add(pnlButtons, BorderLayout.SOUTH);
 		
-		//getContentPane().add(mainPanel);
 		add(mainPanel);
 		
 		reDisplay();
@@ -100,7 +96,10 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		result = Actions.Cancel;
 		
 		pack();
-		setMinimumSize(new Dimension(getWidth(), pnlButtons.getHeight() << 1));
+		setMinimumSize(new Dimension(
+				pnlInnerButtons.getWidth() + 27, 
+				pnlContent.getHeight() + (pnlButtons.getHeight() << 1) + 12
+		));
 		
 		setLocationRelativeTo(frame);
 		setVisible(true);
@@ -112,39 +111,6 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		return result;
 		
 	} 
-	
-//	public Component getComponent(String name){
-//		
-//		Component result = null;
-//		
-//		
-//		for (Component component : ((JPanel)pnlContent.getComponent(0)).getComponents()){
-////			if (component.getName() != null && component.getName().equals(name)){
-////				result = component;
-////				break;
-////			}
-//			
-//			System.out.println(component);
-//		}
-//		
-//		return result;
-//		
-//	}
-//	
-//	public String getTextFieldValue(String name){
-//		
-//		JTextField txt = (JTextField)getComponent("txt" + name);
-//		
-//		return txt == null ? "" : txt.getText();
-//		
-//	}
-//	public String getLabelValue(String name){
-//		
-//		JLabel lbl = (JLabel)getComponent("lbl" + name);
-//		
-//		return lbl == null ? "" : lbl.getText().replace(":", "");
-//		
-//	}
 	
 	private void handleOkAction(){
 		

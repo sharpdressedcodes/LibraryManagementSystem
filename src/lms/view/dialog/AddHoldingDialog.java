@@ -1,24 +1,21 @@
 package lms.view.dialog;
 
-import java.awt.GridLayout;
 import java.text.ParseException;
-
 import javax.swing.*;
 import javax.swing.text.*;
-
-import lms.model.dialog.verifier.LengthInputVerifier;
+import lms.model.dialog.verifier.*;
 
 @SuppressWarnings("serial")
-public class AddHoldingDialog extends AbstractDialog {
+public class AddHoldingDialog extends FieldsDialog {
 
-	//private String type;
 	private JLabel lblId;
 	private JLabel lblTitle;
 	private JLabel lblFee;
-	//private JTextField txtId;
 	private JFormattedTextField txtId;
 	private JTextField txtTitle;
 	private JComboBox<String> cboFee;
+	
+	public static final char NUMERIC_PLACEHOLDER = '_';
 	
 	public AddHoldingDialog(JFrame frame, String holdingType){
 		
@@ -30,41 +27,29 @@ public class AddHoldingDialog extends AbstractDialog {
 		
 		super(frame);
 		
-		//this.type = type;
-		
 		setTitle("Add " + holdingType);
-		setResizable(false);
 		
 		lblId = new JLabel(holdingType + " Id:");
 		lblTitle = new JLabel(holdingType + " Title:");
-		lblFee = new JLabel(holdingType + " Fee: $");
+		lblFee = new JLabel(holdingType + " Fee ($):");		
+		txtId = new JFormattedTextField(createFormatter("#######"));	
 		
-		txtId = new JFormattedTextField(createFormatter("#######"));
-		txtId.setColumns(AbstractDialog.DEFAULT_TEXTFIELD_COLUMNS);
 		txtTitle = new JTextField("", AbstractDialog.DEFAULT_TEXTFIELD_COLUMNS);
 		cboFee = holdingFees == null ? new JComboBox<String>() : new JComboBox<String>(holdingFees);			
 		
-		txtId.setInputVerifier(new LengthInputVerifier(7, 7));
+		txtId.setColumns(AbstractDialog.DEFAULT_TEXTFIELD_COLUMNS);
+		cboFee.setAlignmentX(RIGHT_ALIGNMENT);
+		
+		//txtId.setInputVerifier(new LengthInputVerifier(7, 7));
+		txtId.setInputVerifier(new NumericInputVerifier());
 		txtTitle.setInputVerifier(new LengthInputVerifier(3, 0));
 		
-		lblId.setLabelFor(txtId);
-		lblTitle.setLabelFor(lblTitle);
-		lblFee.setLabelFor(cboFee);
+		addField(lblId, txtId);
+		addField(lblTitle, txtTitle);
 		
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(0, 2, 10, 5));
-		
-		panel.add(lblId);
-		panel.add(txtId);
-		panel.add(lblTitle);
-		panel.add(txtTitle);
-		
-		if (holdingFees != null){
-			panel.add(lblFee);
-			panel.add(cboFee);
-		}
-														
-		getContentPanel().add(panel);		
+		if (holdingFees != null)
+			addField(lblFee, cboFee);
+	
 		display();
 		
 	}
@@ -110,7 +95,11 @@ public class AddHoldingDialog extends AbstractDialog {
 		MaskFormatter formatter = null;
 		
 		try {
-			formatter = new MaskFormatter(s);			
+			
+			formatter = new MaskFormatter(s);	
+			formatter.setPlaceholderCharacter(NUMERIC_PLACEHOLDER);
+			//formatter.setValueClass(String.class);
+			
 		} catch (ParseException ex){}
 		
 		return formatter;

@@ -1,13 +1,10 @@
 package lms.view.dialog;
 
-import java.awt.*;
-
 import javax.swing.*;
-
 import lms.model.dialog.verifier.LengthInputVerifier;
 
 @SuppressWarnings("serial")
-public class InitCollectionDialog extends AbstractDialog {
+public class InitCollectionDialog extends FieldsDialog {
 
 	private JLabel lblCode;
 	private JLabel lblName;
@@ -19,27 +16,18 @@ public class InitCollectionDialog extends AbstractDialog {
 		super(frame);
 		
 		setTitle("Init Collection");					
-		setResizable(false);
-		
-		JPanel panel = new JPanel();
+
 		lblCode = new JLabel("Collection Code:");
 		lblName = new JLabel("Collection Name:");
 		txtCode = new JTextField(collectionCode, AbstractDialog.DEFAULT_TEXTFIELD_COLUMNS);
 		txtName = new JTextField(collectionName, AbstractDialog.DEFAULT_TEXTFIELD_COLUMNS);
 		
-		lblCode.setLabelFor(txtCode);
-		lblName.setLabelFor(txtName);;
-		
 		txtCode.setInputVerifier(new LengthInputVerifier());
 		txtName.setInputVerifier(new LengthInputVerifier());
 		
-		panel.setLayout(new GridLayout(2, 2, 10, 5));
-		panel.add(lblCode);
-		panel.add(txtCode);
-		panel.add(lblName);
-		panel.add(txtName);
-								
-		getContentPanel().add(panel);		
+		addField(lblCode, txtCode);
+		addField(lblName, txtName);
+	
 		display();
 		
 	}

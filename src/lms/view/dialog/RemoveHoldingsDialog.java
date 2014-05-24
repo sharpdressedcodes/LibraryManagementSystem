@@ -1,8 +1,6 @@
 package lms.view.dialog;
 
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class RemoveHoldingsDialog extends AbstractDialog {
@@ -40,5 +38,5 @@ public class RemoveHoldingsDialog extends AbstractDialog {
 		return ids;				
 		
 	}
-	
+
 }

@@ -47,8 +47,11 @@ public class Controller {
 			code = dialog.getHoldingId();
 			title = dialog.getHoldingTitle();			
 						
-			if (code.equals(""))
-				showErrorDialog(String.format("%s cannot be empty.", dialog.getHoldingId(true)));
+			//if (code.equals(""))
+				//showErrorDialog(String.format("%s cannot be empty.", dialog.getHoldingId(true)));
+			
+			/*else*/ if (code.contains(String.valueOf(AddHoldingDialog.NUMERIC_PLACEHOLDER)))
+				showErrorDialog(String.format("Invalid %s.", dialog.getHoldingId(true)));
 			
 			else if (title.equals(""))
 				showErrorDialog(String.format("%s cannot be empty.", dialog.getHoldingTitle(true)));
@@ -63,7 +66,7 @@ public class Controller {
 			
 		}
 
-		if (!code.equals("") && !title.equals("")){								
+		if (!code.contains(String.valueOf(AddHoldingDialog.NUMERIC_PLACEHOLDER)) && !title.equals("")){								
 			
 			this.model.addHolding(new Book(Integer.parseInt(code), title));					
 			updateDisplay();
@@ -82,8 +85,11 @@ public class Controller {
 			code = dialog.getHoldingId();
 			title = dialog.getHoldingTitle();			
 						
-			if (code.equals(""))
-				showErrorDialog(String.format("%s cannot be empty.", dialog.getHoldingId(true)));
+			/*if (code.equals(""))
+				showErrorDialog(String.format("%s cannot be empty.", dialog.getHoldingId(true)));*/
+			
+			if (code.contains(String.valueOf(AddHoldingDialog.NUMERIC_PLACEHOLDER)))
+				showErrorDialog(String.format("Invalid %s.", dialog.getHoldingId(true)));
 			
 			else if (title.equals(""))
 				showErrorDialog(String.format("%s cannot be empty.", dialog.getHoldingTitle(true)));
@@ -98,7 +104,7 @@ public class Controller {
 			
 		}
 
-		if (!code.equals("") && !title.equals("")){								
+		if (!code.contains(String.valueOf(AddHoldingDialog.NUMERIC_PLACEHOLDER)) && !title.equals("")){								
 			
 			this.model.addHolding(new Video(
 					Integer.parseInt(code), 
