@@ -2,7 +2,6 @@ package lms.view.dialog;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 @SuppressWarnings("serial")
@@ -24,13 +23,9 @@ public class RemoveHoldingsDialog extends AbstractDialog {
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED
 		);		
-		JPanel contentPanel = new JPanel();
-		//contentPanel.setLayout(new GridLayout(0,1));
-		//contentPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
 		
-		contentPanel.add(scroller);
-		
-		show(contentPanel);
+		getContentPanel().add(scroller);
+		display();
 		
 	}
 

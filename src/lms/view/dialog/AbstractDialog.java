@@ -15,9 +15,10 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 	private JPanel mainPanel;		
 	private JPanel pnlButtons;
 	private JPanel pnlInnerButtons;
-	//private JPanel pnlContent;
+	private JPanel pnlContent;
 	private JFrame frame; 
 	
+	public static final int DEFAULT_TEXTFIELD_COLUMNS = 10;
  	public static enum Actions {
 		OK,
 		Cancel
@@ -44,6 +45,10 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		cmdOk.addActionListener(this);
 		cmdCancel.addActionListener(this);
 		
+		cmdOk.setMnemonic('O');
+		cmdCancel.setMnemonic('C');
+		
+		pnlContent = new JPanel();
 		mainPanel = new JPanel();		
 		pnlButtons = new JPanel();
 		pnlInnerButtons = new JPanel();
@@ -58,14 +63,28 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		mainPanel.setLayout(new BorderLayout());
 		//mainPanel.setLayout(new GridLayout(2, 1));
 		
+		pnlContent.setLayout(new GridLayout(0,1));
+		pnlContent.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
+		
+		getRootPane().setDefaultButton(cmdOk);
+		
 	}
-
-	public void show(JPanel content){
+	public JPanel getContentPanel(){
+		
+		return pnlContent;
+		
+	}
+	public void display(){
+		
+		display(pnlContent);
+		
+	}
+	public void display(JPanel content){
 		
 		mainPanel.removeAll();
 		
-		content.setLayout(new GridLayout(0,1));
-		content.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
+		//content.setLayout(new GridLayout(0,1));
+		//content.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
 		
 		mainPanel.add(content);//, BorderLayout.NORTH);
 		mainPanel.add(pnlButtons, BorderLayout.SOUTH);
@@ -73,8 +92,15 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		//getContentPane().add(mainPanel);
 		add(mainPanel);
 		
+		reDisplay();
+		
+	}
+	public void reDisplay(){
+		
+		result = Actions.Cancel;
+		
 		pack();
-		setMinimumSize(new Dimension(getWidth(), pnlButtons.getHeight() << 1));	
+		setMinimumSize(new Dimension(getWidth(), pnlButtons.getHeight() << 1));
 		
 		setLocationRelativeTo(frame);
 		setVisible(true);
@@ -86,6 +112,39 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		return result;
 		
 	} 
+	
+//	public Component getComponent(String name){
+//		
+//		Component result = null;
+//		
+//		
+//		for (Component component : ((JPanel)pnlContent.getComponent(0)).getComponents()){
+////			if (component.getName() != null && component.getName().equals(name)){
+////				result = component;
+////				break;
+////			}
+//			
+//			System.out.println(component);
+//		}
+//		
+//		return result;
+//		
+//	}
+//	
+//	public String getTextFieldValue(String name){
+//		
+//		JTextField txt = (JTextField)getComponent("txt" + name);
+//		
+//		return txt == null ? "" : txt.getText();
+//		
+//	}
+//	public String getLabelValue(String name){
+//		
+//		JLabel lbl = (JLabel)getComponent("lbl" + name);
+//		
+//		return lbl == null ? "" : lbl.getText().replace(":", "");
+//		
+//	}
 	
 	private void handleOkAction(){
 		

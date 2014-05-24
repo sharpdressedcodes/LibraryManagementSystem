@@ -9,8 +9,7 @@ import lms.model.Video;
 import lms.model.facade.LMSModel;
 import lms.model.visitor.HoldingVisitor;
 import lms.view.MainView;
-import lms.view.dialog.AbstractDialog;
-import lms.view.dialog.RemoveHoldingsDialog;
+import lms.view.dialog.*;
 import lms.view.grid.cells.*;
 import lms.view.test.Tester;
 
@@ -39,28 +38,81 @@ public class Controller {
 	}
 	public void addBook(){
 		
-		// TODO: get data from user through custom dialogs
-		// validate data + check if already exists
+		AddHoldingDialog dialog = new AddHoldingDialog(mainView, "Book");
+		String code = "";
+		String title = "";
+		
+		while (dialog.getResult().equals(AbstractDialog.Actions.OK)){
+			
+			code = dialog.getHoldingId();
+			title = dialog.getHoldingTitle();			
+						
+			if (code.equals(""))
+				showErrorDialog(String.format("%s cannot be empty.", dialog.getHoldingId(true)));
+			
+			else if (title.equals(""))
+				showErrorDialog(String.format("%s cannot be empty.", dialog.getHoldingTitle(true)));
+			
+			else if (this.model.getHolding(Integer.parseInt(code)) != null)
+				showErrorDialog(String.format("Cannot add Book.\nA holding with id %s already exists.", code));
+			
+			else
+				break;
+			
+			dialog.reDisplay();
+			
+		}
 
-		Book book = new Book(1000091, "Introduction to Java Programming");
-		this.model.addHolding(book);
-				
-		updateDisplay();				
+		if (!code.equals("") && !title.equals("")){								
+			
+			this.model.addHolding(new Book(Integer.parseInt(code), title));					
+			updateDisplay();
+			
+		}
 		
 	}
 	public void addVideo(){
 		
-		// TODO: get data from user through custom dialogs
-		// validate data
-		Video video = new Video(2020091, "Java 1", 4);
-		this.model.addHolding(video);
+		AddHoldingDialog dialog = new AddHoldingDialog(mainView, "Video", new String[]{"4", "6"});
+		String code = "";
+		String title = "";
 		
-		updateDisplay();
+		while (dialog.getResult().equals(AbstractDialog.Actions.OK)){
+			
+			code = dialog.getHoldingId();
+			title = dialog.getHoldingTitle();			
+						
+			if (code.equals(""))
+				showErrorDialog(String.format("%s cannot be empty.", dialog.getHoldingId(true)));
+			
+			else if (title.equals(""))
+				showErrorDialog(String.format("%s cannot be empty.", dialog.getHoldingTitle(true)));
+			
+			else if (this.model.getHolding(Integer.parseInt(code)) != null)
+				showErrorDialog(String.format("Cannot add Video.\nA holding with id %s already exists.", code));
+			
+			else
+				break;
+			
+			dialog.reDisplay();
+			
+		}
+
+		if (!code.equals("") && !title.equals("")){								
+			
+			this.model.addHolding(new Video(
+					Integer.parseInt(code), 
+					title, 
+					Integer.parseInt(dialog.getHoldingFee())
+			));					
+			updateDisplay();
+			
+		}
 		
 	}
 	public void removeHolding(int holdingId){
 		
-		if (showConfirmDialog(String.format("Permanently remove this %s?\n%s", formatHoldingType(this.model.getHolding(holdingId).getType()), holdingId))){
+		if (showConfirmDialog(String.format("Permanently remove this %s?\n%s", toTitleCase(this.model.getHolding(holdingId).getType()), holdingId))){
 		
 			this.model.removeHolding(holdingId);			
 			updateDisplay();
@@ -93,16 +145,28 @@ public class Controller {
 	public void removeHoldings(Holding[] holdings){
 		
 		String[] holdingStrings = new String[holdings.length];
-		String type = formatHoldingType(holdings[0].getType());
+		String type = toTitleCase(holdings[0].getType());
 		
 		for (int i = 0; i < holdings.length; i++)
 			holdingStrings[i] = holdings[i].toString().substring(0, holdings[i].toString().lastIndexOf(':'));
 							
 		RemoveHoldingsDialog dialog = new RemoveHoldingsDialog(this.mainView, type, holdingStrings);
 		
-		if (dialog.getResult().equals(AbstractDialog.Actions.OK)){
+		int[] holdingIds = null;
+		
+		while (dialog.getResult().equals(AbstractDialog.Actions.OK)){
 			
-			int[] holdingIds = dialog.getSelectedHoldingIds();
+			holdingIds = dialog.getSelectedHoldingIds();
+			
+			if (holdingIds.length > 0)
+				break;
+				
+			showErrorDialog("You must select at least one item to remove.");
+			dialog.reDisplay();						
+			
+		}
+		
+		if (holdingIds != null && holdingIds.length > 0){
 			StringBuffer sb = new StringBuffer();
 			
 			for (int holdingId : holdingIds)
@@ -119,8 +183,12 @@ public class Controller {
 				updateDisplay();
 				
 			}
-						
-		}			
+		}		
+		
+	}
+	public void showErrorDialog(String message){
+		
+		JOptionPane.showMessageDialog(this.mainView, message, "Error", JOptionPane.ERROR_MESSAGE);
 		
 	}
 	public boolean showConfirmDialog(String message){
@@ -132,22 +200,42 @@ public class Controller {
 		) == JOptionPane.OK_OPTION;
 		
 	}
-	public boolean addLibraryCollection(){
+	public boolean addLibraryCollection(){				
 		
-		/** (1) display input dialog box
-     *  (2) get data from the dialog box
-     *  (3) validate the data (code and name)
-     *  (4) if (3) valid, call
-     *      model.addCollection (new LibraryCollection (code, name));
-     *      return true;
-     *  (5) if (3) invalid, show error message, clear data in the input dialog
-     *      and repeat (2) and (3) until valid
-     */ 
+		String code = "";
+		String name = "";
 		
-		//JOptionPane inputDialog = JOptionPane.
+		if (this.model.getCollection() != null){
+			code = this.model.getCollection().getCode();
+			name = this.model.getCollection().getName();
+		}
 		
-		this.model.addCollection(new LibraryCollection("some code", "some name"));
-		return true;
+		InitCollectionDialog dialog = new InitCollectionDialog(mainView, code, name);
+		code = "";
+		name = "";
+		
+		while (dialog.getResult().equals(AbstractDialog.Actions.OK)){
+			
+			code = dialog.getCollectionCode();
+			name = dialog.getCollectionName();
+			
+			if (code.equals(""))
+				showErrorDialog(String.format("%s cannot be empty.", dialog.getCollectionCode(true)));
+			else if (name.equals(""))
+				showErrorDialog(String.format("%s cannot be empty.", dialog.getCollectionName(true)));						
+			else
+				break;
+			
+			dialog.reDisplay();
+			
+		}
+		
+		if (!code.equals("") && !name.equals("")){
+			this.model.addCollection(new LibraryCollection(code, name));			
+			return true;
+		}
+			
+		return false;
 		
 	}
 	public void resetLibraryCollection(){
@@ -271,13 +359,13 @@ public class Controller {
 		this.mainView.updateStatusBar(getStatusData());
 		
 	}
-	public String formatHoldingType(String holdingId){
+	public String toTitleCase(String str){
 		
 		// Convert STRING or string to String
 		return String.format(
 				"%s%s", 
-				holdingId.substring(0, 1).toUpperCase(), 
-				holdingId.substring(1).toLowerCase()
+				str.substring(0, 1).toUpperCase(), 
+				str.substring(1).toLowerCase()
 		);
 		
 	}

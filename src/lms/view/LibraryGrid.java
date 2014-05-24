@@ -19,7 +19,8 @@ public class LibraryGrid extends JPanel {
 		this.controller = new LibraryGridController(view);
 		//this.mainView = view;
 		
-		this.setBackground(Color.WHITE);		
+		this.setBackground(Color.WHITE);
+		this.setDoubleBuffered(true);
 		
 	}
 	
