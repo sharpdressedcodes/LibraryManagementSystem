@@ -37,12 +37,40 @@ public class FieldsDialog extends AbstractDialog {
 	
 	protected void addField(JLabel label, JComponent component){
 		
+		addField(label, component, null);
+		
+	}
+
+	protected void addField(JLabel label, JComponent component, JLabel suggestion){
+		
 		GridBagLayout layout = (GridBagLayout)panel.getLayout();
 		
 		label.setLabelFor(component);
 		
-		layout.setConstraints(label, labelConstraints);
-		panel.add(label);
+		if (suggestion == null){
+			
+			layout.setConstraints(label, labelConstraints);
+			panel.add(label);
+			
+		} else {
+			
+			JPanel labelPanel = new JPanel();
+			labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.Y_AXIS));
+			labelPanel.add(label);
+			labelPanel.add(suggestion);
+						
+			Font font = label.getFont();
+			suggestion.setFont(font.deriveFont(Font.ITALIC, font.getSize() - 2));
+			
+			int anchor = labelConstraints.anchor;
+			labelConstraints.anchor = GridBagConstraints.NORTH;
+			
+			layout.setConstraints(labelPanel, labelConstraints);
+			panel.add(labelPanel);
+			
+			labelConstraints.anchor = anchor;
+			
+		}
 		
 		layout.setConstraints(component, componentConstraints);
 		panel.add(component);

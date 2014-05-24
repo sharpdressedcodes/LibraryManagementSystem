@@ -27,7 +27,11 @@ public class MainView extends JFrame {
 	private int totalCells;
 	
 	private final static String STATUSBAR_FORMAT = "Collection Code: [%s] | Total Books: [%s] | Total Videos: [%s]";
-	
+//	public static enum GridState {
+//		empty,
+//		initalised,
+//		ready
+//	}
 	public MainView(LMSModel model) throws HeadlessException {
 		
 		super("Library Management System");

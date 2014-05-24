@@ -1,6 +1,8 @@
 package lms.view.dialog;
 
 import javax.swing.*;
+import javax.swing.event.*;
+
 import lms.model.dialog.verifier.LengthInputVerifier;
 
 @SuppressWarnings("serial")
@@ -25,10 +27,25 @@ public class InitCollectionDialog extends FieldsDialog {
 		txtCode.setInputVerifier(new LengthInputVerifier());
 		txtName.setInputVerifier(new LengthInputVerifier());
 		
-		addField(lblCode, txtCode);
-		addField(lblName, txtName);
+		DocumentListener listener = createDocumentListener();
+		
+		txtCode.getDocument().addDocumentListener(listener);
+		txtName.getDocument().addDocumentListener(listener);
+		
+		addField(lblCode, txtCode, new JLabel("All chars allowed. Min: 1"));
+		addField(lblName, txtName, new JLabel("All chars allowed. Min: 1"));
 	
 		display();
+		
+	}
+	
+	@Override
+	public void checkComponents(){
+		
+		getOkButton().setEnabled(
+				txtCode.getInputVerifier().verify(txtCode) && 
+				txtName.getInputVerifier().verify(txtName)
+		);
 		
 	}
 	

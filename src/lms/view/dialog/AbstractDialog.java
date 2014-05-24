@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 @SuppressWarnings("serial")
 public abstract class AbstractDialog extends JDialog implements ActionListener {
@@ -16,7 +18,7 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 	private JPanel pnlButtons;
 	private JPanel pnlInnerButtons;
 	private JPanel pnlContent;
-	private JFrame frame; 
+	private JFrame frame; 	
 	
 	public static final int DEFAULT_TEXTFIELD_COLUMNS = 20;
  	public static enum Actions {
@@ -63,12 +65,12 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		
 		pnlContent.setLayout(new GridLayout(0,1));
-		pnlContent.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
-		
+		pnlContent.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));		
 		
 		getRootPane().setDefaultButton(cmdOk);
 		
 	}
+
 	public JPanel getContentPanel(){
 		
 		return pnlContent;
@@ -88,6 +90,8 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		
 		add(mainPanel);
 		
+		cmdOk.setEnabled(false);		
+		
 		reDisplay();
 		
 	}
@@ -105,12 +109,43 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		setVisible(true);
 		
 	}
-	
+	protected JButton getOkButton(){
+		
+		return this.cmdOk;
+		
+	}
 	public Actions getResult(){
 		
 		return result;
 		
 	} 
+	
+	public DocumentListener createDocumentListener(){
+		
+		DocumentListener listener = new DocumentListener(){
+
+			@Override
+			public void changedUpdate(DocumentEvent arg0) {
+				checkComponents();		
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent arg0) {
+				checkComponents();				
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent arg0) {
+				checkComponents();				
+			}
+			
+		};
+		
+		return listener;
+		
+	}
+	
+	public void checkComponents(){}
 	
 	private void handleOkAction(){
 		

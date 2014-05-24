@@ -1,8 +1,11 @@
 package lms.view.dialog;
 
 import java.text.ParseException;
+
 import javax.swing.*;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.*;
+
 import lms.model.dialog.verifier.*;
 
 @SuppressWarnings("serial")
@@ -31,7 +34,7 @@ public class AddHoldingDialog extends FieldsDialog {
 		
 		lblId = new JLabel(holdingType + " Id:");
 		lblTitle = new JLabel(holdingType + " Title:");
-		lblFee = new JLabel(holdingType + " Fee ($):");		
+		lblFee = new JLabel(holdingType + " Fee:");		
 		txtId = new JFormattedTextField(createFormatter("#######"));	
 		
 		txtTitle = new JTextField("", AbstractDialog.DEFAULT_TEXTFIELD_COLUMNS);
@@ -44,13 +47,28 @@ public class AddHoldingDialog extends FieldsDialog {
 		txtId.setInputVerifier(new NumericInputVerifier());
 		txtTitle.setInputVerifier(new LengthInputVerifier(3, 0));
 		
-		addField(lblId, txtId);
-		addField(lblTitle, txtTitle);
+		DocumentListener listener = createDocumentListener();
+		
+		txtId.getDocument().addDocumentListener(listener);
+		txtTitle.getDocument().addDocumentListener(listener);
+		
+		addField(lblId, txtId, new JLabel("7 digits only. Eg: 1234567"));
+		addField(lblTitle, txtTitle, new JLabel("All chars allowed. Min: 3"));
 		
 		if (holdingFees != null)
-			addField(lblFee, cboFee);
+			addField(lblFee, cboFee, new JLabel("Australian Dollars (AUD)"));
 	
 		display();
+		
+	}
+	
+	@Override
+	public void checkComponents(){
+				
+		getOkButton().setEnabled(
+				txtId.getInputVerifier().verify(txtId) && 
+				txtTitle.getInputVerifier().verify(txtTitle)
+		);
 		
 	}
 	
