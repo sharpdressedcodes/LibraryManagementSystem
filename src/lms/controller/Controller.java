@@ -38,7 +38,7 @@ public class Controller {
 	}
 	public void addBook(){
 		
-		AddHoldingDialog dialog = new AddHoldingDialog(mainView, "Book");
+		AddHoldingDialog dialog = new AddHoldingDialog(mainView, "Book");						
 		String code = "";
 		String title = "";
 		
@@ -47,16 +47,7 @@ public class Controller {
 			code = dialog.getHoldingId();
 			title = dialog.getHoldingTitle();			
 						
-			//if (code.equals(""))
-				//showErrorDialog(String.format("%s cannot be empty.", dialog.getHoldingId(true)));
-			
-			/*else*/ if (code.contains(String.valueOf(AddHoldingDialog.NUMERIC_PLACEHOLDER)))
-				showErrorDialog(String.format("Invalid %s.", dialog.getHoldingId(true)));
-			
-			else if (title.equals(""))
-				showErrorDialog(String.format("%s cannot be empty.", dialog.getHoldingTitle(true)));
-			
-			else if (this.model.getHolding(Integer.parseInt(code)) != null)
+			if (this.model.getHolding(Integer.parseInt(code)) != null)
 				showErrorDialog(String.format("Cannot add Book.\nA holding with id %s already exists.", code));
 			
 			else
@@ -66,7 +57,7 @@ public class Controller {
 			
 		}
 
-		if (!code.contains(String.valueOf(AddHoldingDialog.NUMERIC_PLACEHOLDER)) && !title.equals("")){								
+		if (!code.equals("") && !title.equals("")){								
 			
 			this.model.addHolding(new Book(Integer.parseInt(code), title));					
 			updateDisplay();
@@ -85,16 +76,7 @@ public class Controller {
 			code = dialog.getHoldingId();
 			title = dialog.getHoldingTitle();			
 						
-			/*if (code.equals(""))
-				showErrorDialog(String.format("%s cannot be empty.", dialog.getHoldingId(true)));*/
-			
-			if (code.contains(String.valueOf(AddHoldingDialog.NUMERIC_PLACEHOLDER)))
-				showErrorDialog(String.format("Invalid %s.", dialog.getHoldingId(true)));
-			
-			else if (title.equals(""))
-				showErrorDialog(String.format("%s cannot be empty.", dialog.getHoldingTitle(true)));
-			
-			else if (this.model.getHolding(Integer.parseInt(code)) != null)
+			if (this.model.getHolding(Integer.parseInt(code)) != null)
 				showErrorDialog(String.format("Cannot add Video.\nA holding with id %s already exists.", code));
 			
 			else
@@ -104,7 +86,7 @@ public class Controller {
 			
 		}
 
-		if (!code.contains(String.valueOf(AddHoldingDialog.NUMERIC_PLACEHOLDER)) && !title.equals("")){								
+		if (!code.equals("") && !title.equals("")){								
 			
 			this.model.addHolding(new Video(
 					Integer.parseInt(code), 
@@ -156,40 +138,36 @@ public class Controller {
 		for (int i = 0; i < holdings.length; i++)
 			holdingStrings[i] = holdings[i].toString().substring(0, holdings[i].toString().lastIndexOf(':'));
 							
-		RemoveHoldingsDialog dialog = new RemoveHoldingsDialog(this.mainView, type, holdingStrings);
-		
+		RemoveHoldingsDialog dialog = new RemoveHoldingsDialog(this.mainView, type, holdingStrings);				
 		int[] holdingIds = null;
 		
 		while (dialog.getResult().equals(AbstractDialog.Actions.OK)){
 			
 			holdingIds = dialog.getSelectedHoldingIds();
 			
-			if (holdingIds.length > 0)
-				break;
+			if (holdingIds != null && holdingIds.length > 0){
+				StringBuffer sb = new StringBuffer();
 				
-			showErrorDialog("You must select at least one item to remove.");
+				for (int holdingId : holdingIds)
+					sb.append(String.format("%s,", holdingId));
+				
+				if (sb.length() > 0)
+					sb.deleteCharAt(sb.length() - 1);
+				
+				if (showConfirmDialog(String.format("Permanently remove these %ss?\n(%s)", type, sb.toString()))){
+					
+					for (int holdingId : holdingIds)		
+						this.model.removeHolding(holdingId);
+
+					updateDisplay();
+					break;
+					
+				}
+			}
+				
 			dialog.reDisplay();						
 			
 		}
-		
-		if (holdingIds != null && holdingIds.length > 0){
-			StringBuffer sb = new StringBuffer();
-			
-			for (int holdingId : holdingIds)
-				sb.append(String.format("%s,", holdingId));
-			
-			if (sb.length() > 0)
-				sb.deleteCharAt(sb.length() - 1);
-			
-			if (showConfirmDialog(String.format("Permanently remove these %ss?\n(%s)", type, sb.toString()))){
-				
-				for (int holdingId : holdingIds)		
-					this.model.removeHolding(holdingId);
-
-				updateDisplay();
-				
-			}
-		}		
 		
 	}
 	public void showErrorDialog(String message){
@@ -206,39 +184,23 @@ public class Controller {
 		) == JOptionPane.OK_OPTION;
 		
 	}
-	public boolean addLibraryCollection(){				
+	public boolean addLibraryCollection(){								
 		
-		String code = "";
-		String name = "";
+		InitCollectionDialog dialog = new InitCollectionDialog(
+				mainView, 
+				getCollectionCode(), 
+				getCollectionName()
+		);
 		
-		if (this.model.getCollection() != null){
-			code = this.model.getCollection().getCode();
-			name = this.model.getCollection().getName();
-		}
-		
-		InitCollectionDialog dialog = new InitCollectionDialog(mainView, code, name);
-		code = "";
-		name = "";
-		
-		while (dialog.getResult().equals(AbstractDialog.Actions.OK)){
+		if (dialog.getResult().equals(AbstractDialog.Actions.OK)){
 			
-			code = dialog.getCollectionCode();
-			name = dialog.getCollectionName();
+			this.model.addCollection(new LibraryCollection(
+					dialog.getCollectionCode(), 
+					dialog.getCollectionName()
+			));
 			
-			if (code.equals(""))
-				showErrorDialog(String.format("%s cannot be empty.", dialog.getCollectionCode(true)));
-			else if (name.equals(""))
-				showErrorDialog(String.format("%s cannot be empty.", dialog.getCollectionName(true)));						
-			else
-				break;
-			
-			dialog.reDisplay();
-			
-		}
-		
-		if (!code.equals("") && !name.equals("")){
-			this.model.addCollection(new LibraryCollection(code, name));			
 			return true;
+			
 		}
 			
 		return false;
@@ -253,13 +215,29 @@ public class Controller {
 				showConfirmDialog("Reset Library Collection?")){
 										
 				this.model.addCollection(new LibraryCollection(
-						this.model.getCollection().getCode(), 
-						this.model.getCollection().getName()
+						getCollectionCode(), 
+						getCollectionName()
 				));
 			
 				this.clearDisplay();			
 				
 		}		
+		
+	}
+	public String getCollectionCode(){
+		
+		if (this.model.getCollection() != null)
+			return this.model.getCollection().getCode();
+		
+		return "";
+					
+	}
+	public String getCollectionName(){
+		
+		if (this.model.getCollection() != null)
+			return this.model.getCollection().getName();
+		
+		return "";
 		
 	}
 	public void populateHoldings(){
@@ -381,4 +359,5 @@ public class Controller {
 		System.exit(0);
 
 	}
+	
 }
