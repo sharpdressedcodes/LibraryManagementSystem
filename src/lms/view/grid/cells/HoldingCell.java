@@ -24,10 +24,15 @@ public abstract class HoldingCell extends GridCell implements Visitable {
 		
 		this.holdingInfo = this.parseHoldingInfo(holdingInfo);
 		this.lbl = new JLabel(this.holdingInfo);
+		this.lbl.setBorder(BorderFactory.createEmptyBorder(1, 5, 1, 5));
 		
 		this.setLayout(new BorderLayout());
 		
-		JScrollPane scroller = new JScrollPane(this.lbl, JScrollPane.VERTICAL_SCROLLBAR_NEVER, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);		
+		JScrollPane scroller = new JScrollPane(
+				this.lbl, 
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED
+		);		
 		scroller.getViewport().setBackground(Color.GRAY);
 		scroller.setBorder(null);
 		

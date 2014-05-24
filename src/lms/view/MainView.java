@@ -1,6 +1,7 @@
 package lms.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.HeadlessException;
 
 import javax.swing.JFrame;
@@ -64,6 +65,10 @@ public class MainView extends JFrame {
 		
 		this.pack();
 		this.setSize(this.getWidth(), this.getHeight() + 500);
+		this.setMinimumSize(new Dimension(
+				this.getWidth(), 
+				this.menuBar.getHeight() + this.toolBar.getHeight() + this.statusBar.getHeight() + 38
+		));
 		this.setLocationRelativeTo(null);
 		
 	}

@@ -90,7 +90,8 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		
 		add(mainPanel);
 		
-		cmdOk.setEnabled(false);		
+		cmdOk.setEnabled(false);
+		checkComponents();
 		
 		reDisplay();
 		
@@ -145,6 +146,7 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		
 	}
 	
+	// Override this function to enable/disable cmdOk
 	public void checkComponents(){}
 	
 	private void handleOkAction(){

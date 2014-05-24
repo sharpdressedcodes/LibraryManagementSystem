@@ -94,9 +94,17 @@ public class MenuBarController implements ActionListener {
 	}
 	public void handleAboutAction(ActionEvent e){
 		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("Library Management System\nBy Greg Kappatos\n25th May, 2014\n\n");
+		sb.append("Visitor Pattern Usage Locations:\n");
+		sb.append("lms.controller.Controller:: removeBooks(), removeVideos(), getHoldingCells()\n");
+		sb.append("lms.model.LibraryCollection:: countBooks(), countVideos()\n");
+		sb.append("lms.view.LibraryGrid:: update()");
+		
 		JOptionPane.showMessageDialog(
 				this.mainView, 
-				"Library Management System\nBy Greg Kappatos", 
+				sb.toString(), 
 				"About", 
 				JOptionPane.INFORMATION_MESSAGE
 		);

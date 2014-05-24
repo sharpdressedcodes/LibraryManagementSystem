@@ -13,9 +13,7 @@ public class LibraryGrid extends JPanel {
 
 	//private MainView mainView;	
 	private LibraryGridController controller;
-	
-	
-	
+		
 	public LibraryGrid(MainView view) {
 		
 		this.controller = new LibraryGridController(view);

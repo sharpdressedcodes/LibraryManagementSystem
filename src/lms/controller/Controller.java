@@ -184,7 +184,7 @@ public class Controller {
 		) == JOptionPane.OK_OPTION;
 		
 	}
-	public boolean addLibraryCollection(){								
+	public boolean addLibraryCollection(){
 		
 		InitCollectionDialog dialog = new InitCollectionDialog(
 				mainView, 
@@ -257,7 +257,7 @@ public class Controller {
     return visitor.getCells();
 		
 	}
-	public GridCell[] sortHoldingCells(GridCell[] cells){				
+	public GridCell[] sortHoldingCells(GridCell[] cells){
 		
 		if (this.mainView.getSortOrder() == ToolBarOptionsController.SortActions.code.ordinal()){
 			HoldingCell[] holdingCells = convertCells(cells);
@@ -283,7 +283,7 @@ public class Controller {
 		return holdings;
 		
 	}
-	public int calculatePadCount(int holdingCellCount, int maxColumns){		
+	public int calculatePadCount(int holdingCellCount, int maxColumns){
 		
 		int remaining = holdingCellCount % maxColumns;
 		return holdingCellCount < maxColumns + 1  || remaining == 0 ? 0 : maxColumns - remaining;
