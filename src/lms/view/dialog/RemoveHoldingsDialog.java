@@ -50,7 +50,7 @@ public class RemoveHoldingsDialog extends AbstractDialog implements ListSelectio
 		// Loop through the Strings, and grab the Id from the start.
 		// Return this value to the caller.
 		for (int i = 0; i < holdings.length; i++)
-			ids[i] = Integer.parseInt(holdings[i].substring(0, holdings[i].indexOf(':')));
+			ids[i] = Integer.parseInt(holdings[i].substring(0, holdings[i].indexOf(' ')));
 		
 		return ids;				
 		

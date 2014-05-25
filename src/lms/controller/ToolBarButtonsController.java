@@ -2,9 +2,6 @@ package lms.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import lms.model.Holding;
-import lms.model.facade.LMSModel;
 import lms.model.grid.listener.GridListener;
 import lms.view.MainView;
 import lms.view.ToolBar;
@@ -17,7 +14,7 @@ import lms.view.ToolBar;
 public class ToolBarButtonsController implements ActionListener, GridListener {
 
 	private ToolBar toolBar;
-	private LMSModel model;
+	//private LMSModel model;
 	private MainView mainView;
 	private Controller helper;
 	
@@ -25,7 +22,7 @@ public class ToolBarButtonsController implements ActionListener, GridListener {
 		
 		this.toolBar = toolBar;
 		mainView = toolBar.getMainView();
-		model = mainView.getModel();
+		//model = mainView.getModel();
 		helper = new Controller(mainView);
 		
 		// Tell the main controller that we want to be notified
@@ -35,24 +32,25 @@ public class ToolBarButtonsController implements ActionListener, GridListener {
 	}
 	
 	public void handleInitAction(ActionEvent e){
+		
+		// Create or Reset?
+		switch (toolBar.getInitButton().getToolTipText().toLowerCase()){
+		
+		case "init library":
 			
-		Holding[] holdings = null;
-		
-		// Make sure there is already a collection.
-		if (model.getCollection() != null)
-			holdings = model.getCollection().getAllHoldings();
-		
-		// If there are already holdings, then this command is actually 'reset'.
-		if (holdings != null && holdings.length > 0){
+			// Only populate if adding the collection was successful.
+			if (helper.addLibraryCollection()){
+				
+				helper.populateHoldings();
+				helper.updateDisplay();
+									
+			}			
+			break;
+			
+		case "reset library":
 			
 			helper.resetLibraryCollection();
-			
-		// Otherwise the command is 'init'.
-		} else if (helper.addLibraryCollection()){
-		
-			helper.populateHoldings();
-			helper.updateDisplay();
-								
+			break;
 		}
 		
 	}
@@ -114,6 +112,7 @@ public class ToolBarButtonsController implements ActionListener, GridListener {
 		// No items, no collection - nothing.		
 		if (state.equals(GridState.uninitialised)){
 			
+			toolBar.getInitButton().setToolTipText("Init Library");
 			toolBar.getAddBookButton().setEnabled(false);
 			toolBar.getRemoveBookButton().setEnabled(false);
 			toolBar.getAddVideoButton().setEnabled(false);
@@ -122,6 +121,7 @@ public class ToolBarButtonsController implements ActionListener, GridListener {
 		// Collection has been created.
 		} else if (state.equals(GridState.empty)){
 			
+			toolBar.getInitButton().setToolTipText("Init Library");
 			toolBar.getAddBookButton().setEnabled(true);
 			toolBar.getRemoveBookButton().setEnabled(false);
 			toolBar.getAddVideoButton().setEnabled(true);
@@ -130,6 +130,7 @@ public class ToolBarButtonsController implements ActionListener, GridListener {
 		// No books.
 		} else if (state.equals(GridState.noBooks)){
 			
+			toolBar.getInitButton().setToolTipText("Reset Library");
 			toolBar.getAddBookButton().setEnabled(true);
 			toolBar.getRemoveBookButton().setEnabled(false);
 			toolBar.getAddVideoButton().setEnabled(true);
@@ -138,6 +139,7 @@ public class ToolBarButtonsController implements ActionListener, GridListener {
 		// No videos.
 		} else if (state.equals(GridState.noVideos)){
 			
+			toolBar.getInitButton().setToolTipText("Reset Library");
 			toolBar.getAddBookButton().setEnabled(true);
 			toolBar.getRemoveBookButton().setEnabled(true);
 			toolBar.getAddVideoButton().setEnabled(true);
@@ -146,6 +148,7 @@ public class ToolBarButtonsController implements ActionListener, GridListener {
 		// Fully operational.
 		} else if (state.equals(GridState.initialised)){
 			
+			toolBar.getInitButton().setToolTipText("Reset Library");
 			toolBar.getAddBookButton().setEnabled(true);
 			toolBar.getRemoveBookButton().setEnabled(true);
 			toolBar.getAddVideoButton().setEnabled(true);

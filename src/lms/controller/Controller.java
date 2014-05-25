@@ -186,11 +186,12 @@ public class Controller {
 		String type = toTitleCase(holdings[0].getType());
 		
 		// Gather holding representations by collecting the
-		// toString() and trimming off the BOOK or VIDEO part.
+		// code and titles.
 		for (int i = 0; i < holdings.length; i++)
-			holdingStrings[i] = holdings[i].toString().substring(
-				0, 
-				holdings[i].toString().lastIndexOf(':')
+			holdingStrings[i] = String.format(
+				"%s - %s", 
+				holdings[i].getCode(), 
+				holdings[i].getTitle()
 			);
 		
 		// Now create the dialog, and pass the previously gathered

@@ -144,6 +144,12 @@ public class ToolBar extends JPanel {
 		
 	}
 	
+	public JButton getInitButton(){
+		
+		return cmdInit;
+		
+	}
+
 	public JButton getAddBookButton(){
 		
 		return cmdAddBook;
