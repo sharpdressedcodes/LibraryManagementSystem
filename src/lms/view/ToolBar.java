@@ -7,7 +7,7 @@ import lms.controller.ToolBarButtonsController;
 import lms.controller.ToolBarOptionsController;
 
 @SuppressWarnings("serial")
-public class ToolBar extends JPanel implements Toggleable {
+public class ToolBar extends JPanel {
 
 	private JPanel leftPanel;
 	private JPanel rightPanel;
@@ -54,7 +54,7 @@ public class ToolBar extends JPanel implements Toggleable {
 		this.buttonController = new ToolBarButtonsController(this);
 		this.optionsController = new ToolBarOptionsController(this);
 
-		// Set tooltips
+		// Set ToolTips.
 		this.cmdInit.setToolTipText("Init/Reset");
 		this.cmdAddBook.setToolTipText("Add Book");
 		this.cmdRemoveBook.setToolTipText("Remove Book");
@@ -100,8 +100,7 @@ public class ToolBar extends JPanel implements Toggleable {
 		this.cmdRemoveBook.setActionCommand(Controller.Actions.removeBook.name());
 		this.cmdAddVideo.setActionCommand(Controller.Actions.addVideo.name());
 		this.cmdRemoveVideo.setActionCommand(Controller.Actions.removeVideo.name());
-		
-		
+				
 		// Add Button listeners.
 		this.cmdInit.addActionListener(this.buttonController);
 		this.cmdAddBook.addActionListener(this.buttonController);
@@ -118,7 +117,7 @@ public class ToolBar extends JPanel implements Toggleable {
 		this.optCode.addActionListener(this.optionsController);
 		this.optType.addActionListener(this.optionsController);
 				
-		//LMSModel model = this.mainView.getModel();
+		//LMSModel model = this.mainView.getModel();				
 		
 	}
 
@@ -127,22 +126,29 @@ public class ToolBar extends JPanel implements Toggleable {
 		return this.mainView;
 		
 	}
-	public ToolBarButtonsController getToolBarButtonsController(){
-		return this.buttonController;
-	}
-
-	// Toggleable implementation.
-	@Override
-	public void toggle(boolean state) {
-
-		this.cmdAddBook.setEnabled(state);
-		this.cmdRemoveBook.setEnabled(state);
-		this.cmdAddVideo.setEnabled(state);
-		this.cmdRemoveVideo.setEnabled(state);
+	
+	public JButton getAddBookButton(){
 		
-		this.optNone.setEnabled(state);
-		this.optCode.setEnabled(state);
-		this.optType.setEnabled(state);
+		return cmdAddBook;
 		
 	}
+	
+	public JButton getRemoveBookButton(){
+		
+		return cmdRemoveBook;
+		
+	}
+	
+	public JButton getAddVideoButton(){
+		
+		return cmdAddVideo;
+		
+	}
+	
+	public JButton getRemoveVideoButton(){
+		
+		return cmdRemoveVideo;
+		
+	}
+
 }

@@ -10,6 +10,7 @@ import lms.controller.Controller;
 import lms.controller.MainController;
 import lms.controller.ToolBarOptionsController;
 import lms.model.facade.LMSModel;
+import lms.model.grid.listener.GridListener.GridState;
 import lms.view.grid.cells.EmptyCell;
 import lms.view.grid.cells.GridCell;
 
@@ -25,14 +26,10 @@ public class MainView extends JFrame {
 	private Controller helper;
 	private GridCell[] cells;
 	private int sortOrder;
-	private int totalCells;
+	private int totalCells;	
 	
 	private final static String STATUSBAR_FORMAT = "Collection Code: [%s] | Total Books: [%s] | Total Videos: [%s]";
-//	public static enum GridState {
-//		empty,
-//		initalised,
-//		ready
-//	}
+
 	public MainView(LMSModel model) throws HeadlessException {
 		
 		super("Library Management System");
@@ -60,8 +57,8 @@ public class MainView extends JFrame {
 		this.add(this.toolBar, BorderLayout.NORTH);
 		this.add(this.libraryGrid, BorderLayout.CENTER);
 		this.add(this.statusBar, BorderLayout.SOUTH);
-		
-		//this.toggleControls(false);
+				
+		this.controller.notifyGridListeners(GridState.uninitialised);
 		
 		this.pack();
 		this.setSize(this.getWidth(), this.getHeight() + 500);
@@ -72,47 +69,62 @@ public class MainView extends JFrame {
 		this.setLocationRelativeTo(null);
 		
 	}
+	
 	public LMSModel getModel(){
 		
 		return this.model;
 		
 	}
+	
 	public ToolBar getToolBar(){
 		
 		return this.toolBar;
 		
 	}
+	
 	public LibraryGrid getLibraryGrid(){
 		
 		return this.libraryGrid;
 		
 	}
+	
 	public StatusBar getStatusBar(){
 		
 		return this.statusBar;
 		
 	}
+	
+	public MainController getController(){
+		
+		return this.controller;		
+		
+	}
+	
 	public int getSortOrder(){
 		
 		return this.sortOrder;
 		
 	}
+	
 	public void setSortOrder(int newValue){
 		
 		this.sortOrder = newValue;
 		
 	}
+	
 	public GridCell[] getCells(){
 		
 		return this.cells;
 		
 	}
+	
 	public void setCells(GridCell[] cells, int emptyCellCount){
 		
 		this.cells = cells;
 		this.totalCells = this.cells.length + emptyCellCount;
 		
 	}
+	
 	public void refreshLibraryGrid(){
 		
 		if (this.cells != null){			
@@ -125,9 +137,11 @@ public class MainView extends JFrame {
 			
 			this.libraryGrid.refresh(cells);
 			this.validate();
+			
 		}
 		
 	}
+	
 	public void clearLibraryGrid(){
 
 		this.cells = null;
@@ -137,13 +151,14 @@ public class MainView extends JFrame {
 		this.validate();
 		
 	}
+	
 	public void updateLibraryGrid(GridCell[] cells){
-		
-		//this.toggleControls(true);
+				
 		this.libraryGrid.update(cells);
 		this.validate();
 		
 	}
+	
 	public void updateStatusBar(String[] data){
 		
 		this.statusBar.setText(String.format(
@@ -155,10 +170,5 @@ public class MainView extends JFrame {
 		this.validate();
 		
 	}
-	public void toggleControls(boolean enabled){
 		
-		//this.toolBar.toggle(enabled);
-		//this.menuBar.toggle(enabled);
-		
-	}
 }

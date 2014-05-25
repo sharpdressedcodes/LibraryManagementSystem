@@ -1,41 +1,62 @@
 package lms.view;
 
 import javax.swing.*;
-
 import lms.controller.Controller;
 import lms.controller.MenuBarController;
 
 @SuppressWarnings("serial")
-public class MenuBar extends JMenuBar implements Toggleable {
+public class MenuBar extends JMenuBar {
 
 	private MainView mainView;
 	private MenuBarController controller;
 	
+	// Menus.
+	private JMenu mnuFile;
+	private JMenu mnuLibrary;
+	private JMenu mnuHoldings;
+	private JMenu mnuHelp;
+	
+	// mnuFile sub items.
+	private JMenuItem mnuExit;
+	
+	// mnuLibrary sub items.
+	private JMenuItem mnuInit;
+	private JMenuItem mnuReset;
+	
+	// mnuHoldings sub items.
+	private JMenuItem mnuAddBook;
+	private JMenuItem mnuRemoveBook;
+	private JMenuItem mnuAddVideo;
+	private JMenuItem mnuRemoveVideo;
+	
+	// mnuHelp sub items.
+	private JMenuItem mnuAbout;
+	
 	public MenuBar(MainView view) {
 		
-		this.mainView = view;
-		this.controller = new MenuBarController(this);
+		mainView = view;
+		controller = new MenuBarController(this);
 		
-		JMenu mnuFile = new JMenu("File");
-		JMenu mnuLibrary = new JMenu("Library");
-		JMenu mnuHoldings = new JMenu("Holdings");
-		JMenu mnuHelp = new JMenu("Help");
+		mnuFile = new JMenu("File");
+		mnuLibrary = new JMenu("Library");
+		mnuHoldings = new JMenu("Holdings");
+		mnuHelp = new JMenu("Help");
 		
 		// mnuFile sub items.
-		JMenuItem mnuExit = new JMenuItem("Exit");
+		mnuExit = new JMenuItem("Exit");
 		
 		// mnuLibrary sub items.
-		JMenuItem mnuInit = new JMenuItem("Init Library");
-		JMenuItem mnuReset = new JMenuItem("Reset Library");
+		mnuInit = new JMenuItem("Init Library");
+		mnuReset = new JMenuItem("Reset Library");
 		
 		// mnuHoldings sub items.
-		JMenuItem mnuAddBook = new JMenuItem("Add Book");
-		JMenuItem mnuRemoveBook = new JMenuItem("Remove Book");
-		JMenuItem mnuAddVideo = new JMenuItem("Add Video");
-		JMenuItem mnuRemoveVideo = new JMenuItem("Remove Video");
+		mnuAddBook = new JMenuItem("Add Book");
+		mnuRemoveBook = new JMenuItem("Remove Book");
+		mnuAddVideo = new JMenuItem("Add Video");
+		mnuRemoveVideo = new JMenuItem("Remove Video");
 		
 		// mnuHelp sub items.
-		JMenuItem mnuAbout = new JMenuItem("About");
+		mnuAbout = new JMenuItem("About");
 		
 		
 		mnuFile.setMnemonic('F');
@@ -55,14 +76,14 @@ public class MenuBar extends JMenuBar implements Toggleable {
 		mnuRemoveVideo.setActionCommand(Controller.Actions.removeVideo.name());
 		mnuAbout.setActionCommand(Controller.Actions.about.name());
 		
-		mnuExit.addActionListener(this.controller);
-		mnuInit.addActionListener(this.controller);
-		mnuReset.addActionListener(this.controller);
-		mnuAddBook.addActionListener(this.controller);
-		mnuRemoveBook.addActionListener(this.controller);
-		mnuAddVideo.addActionListener(this.controller);
-		mnuRemoveVideo.addActionListener(this.controller);
-		mnuAbout.addActionListener(this.controller);
+		mnuExit.addActionListener(controller);
+		mnuInit.addActionListener(controller);
+		mnuReset.addActionListener(controller);
+		mnuAddBook.addActionListener(controller);
+		mnuRemoveBook.addActionListener(controller);
+		mnuAddVideo.addActionListener(controller);
+		mnuRemoveVideo.addActionListener(controller);
+		mnuAbout.addActionListener(controller);
 		
 		
 		mnuFile.add(mnuExit);
@@ -78,10 +99,10 @@ public class MenuBar extends JMenuBar implements Toggleable {
 		
 		mnuHelp.add(mnuAbout);
 		
-		this.add(mnuFile);
-		this.add(mnuLibrary);
-		this.add(mnuHoldings);
-		this.add(mnuHelp);
+		add(mnuFile);
+		add(mnuLibrary);
+		add(mnuHoldings);
+		add(mnuHelp);
 		
 	}
 
@@ -90,11 +111,35 @@ public class MenuBar extends JMenuBar implements Toggleable {
 		return this.mainView;
 		
 	}
-
-	// Toggleable implementation.
-	@Override
-	public void toggle(boolean state) {
-		// TODO Auto-generated method stub
+	
+	public JMenuItem getResetMenu(){
+		
+		return mnuReset;
 		
 	}
+	
+	public JMenuItem getAddBookMenu(){
+			
+			return mnuAddBook;
+			
+		}
+	
+	public JMenuItem getRemoveBookMenu(){
+		
+		return mnuRemoveBook;
+		
+	}
+	
+	public JMenuItem getAddVideoMenu(){
+		
+		return mnuAddVideo;
+		
+	}
+	
+	public JMenuItem getRemoveVideoMenu(){
+		
+		return mnuRemoveVideo;
+		
+	}
+
 }

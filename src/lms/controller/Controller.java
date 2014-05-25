@@ -1,12 +1,15 @@
 package lms.controller;
 
 import java.util.*;
+
 import javax.swing.JOptionPane;
+
 import lms.model.Book;
 import lms.model.Holding;
 import lms.model.LibraryCollection;
 import lms.model.Video;
 import lms.model.facade.LMSModel;
+import lms.model.grid.listener.GridListener.GridState;
 import lms.model.visitor.HoldingVisitor;
 import lms.view.MainView;
 import lms.view.dialog.*;
@@ -36,6 +39,7 @@ public class Controller {
 		this.model = this.mainView.getModel();		
 				
 	}
+	
 	public void addBook(){
 		
 		AddHoldingDialog dialog = new AddHoldingDialog(mainView, "Book");						
@@ -65,6 +69,7 @@ public class Controller {
 		}
 		
 	}
+	
 	public void addVideo(){
 		
 		AddHoldingDialog dialog = new AddHoldingDialog(mainView, "Video", new String[]{"4", "6"});
@@ -98,6 +103,7 @@ public class Controller {
 		}
 		
 	}
+	
 	public void removeHolding(int holdingId){
 		
 		if (showConfirmDialog(String.format("Permanently remove this %s?\n%s", toTitleCase(this.model.getHolding(holdingId).getType()), holdingId))){
@@ -108,6 +114,7 @@ public class Controller {
 		}
 		
 	}	
+	
 	public void removeBooks(){
 		
 		HoldingVisitor visitor = new HoldingVisitor();
@@ -119,6 +126,7 @@ public class Controller {
 		removeHoldings(visitor.getBooks());
 		
 	}
+	
 	public void removeVideos(){
 		
 		HoldingVisitor visitor = new HoldingVisitor();
@@ -130,6 +138,7 @@ public class Controller {
 		removeHoldings(visitor.getVideos());
 		
 	}
+	
 	public void removeHoldings(Holding[] holdings){
 		
 		String[] holdingStrings = new String[holdings.length];
@@ -170,11 +179,13 @@ public class Controller {
 		}
 		
 	}
+	
 	public void showErrorDialog(String message){
 		
 		JOptionPane.showMessageDialog(this.mainView, message, "Error", JOptionPane.ERROR_MESSAGE);
 		
 	}
+	
 	public boolean showConfirmDialog(String message){
 		
 		return JOptionPane.showConfirmDialog(
@@ -184,6 +195,7 @@ public class Controller {
 		) == JOptionPane.OK_OPTION;
 		
 	}
+	
 	public boolean addLibraryCollection(){
 		
 		InitCollectionDialog dialog = new InitCollectionDialog(
@@ -206,6 +218,7 @@ public class Controller {
 		return false;
 		
 	}
+	
 	public void resetLibraryCollection(){
 		
 		GridCell[] cells = this.mainView.getCells();
@@ -224,6 +237,7 @@ public class Controller {
 		}		
 		
 	}
+	
 	public String getCollectionCode(){
 		
 		if (this.model.getCollection() != null)
@@ -232,6 +246,7 @@ public class Controller {
 		return "";
 					
 	}
+	
 	public String getCollectionName(){
 		
 		if (this.model.getCollection() != null)
@@ -240,12 +255,14 @@ public class Controller {
 		return "";
 		
 	}
+	
 	public void populateHoldings(){
 		
 		Tester tester = new Tester();
     tester.setupTestData(model);
     
 	}
+	
 	public GridCell[] getHoldingCells(){
 		
 		Holding[] holdings = model.getAllHoldings();
@@ -253,10 +270,13 @@ public class Controller {
 		
 		for (Holding holding : holdings)
 			holding.accept(visitor);				
-        
+    
+		
+		
     return visitor.getCells();
 		
 	}
+	
 	public GridCell[] sortHoldingCells(GridCell[] cells){
 		
 		if (this.mainView.getSortOrder() == ToolBarOptionsController.SortActions.code.ordinal()){
@@ -272,6 +292,7 @@ public class Controller {
 		return cells;
 		
 	}
+	
 	private HoldingCell[] convertCells(GridCell[] cells){
 		
 		int i = 0;
@@ -283,12 +304,14 @@ public class Controller {
 		return holdings;
 		
 	}
+	
 	public int calculatePadCount(int holdingCellCount, int maxColumns){
 		
 		int remaining = holdingCellCount % maxColumns;
 		return holdingCellCount < maxColumns + 1  || remaining == 0 ? 0 : maxColumns - remaining;
 		
 	}
+	
 	public GridCell[] createSortAndCombineCells(GridCell[] holdingCells, int padCount){
 		
 		GridCell[] cells = null;
@@ -310,19 +333,26 @@ public class Controller {
 		return cells;		
 		
 	}
+	
 	public String[] getStatusData() {
+		
     return new String []{
     		model.getCollection().getCode(),
         String.valueOf(model.countBooks()), 
         String.valueOf(model.countVideos())
      };
+    
 	}
+	
 	public void updateDisplay(){
 		
-		if (this.model.getCollection().countBooks() == 0 && this.model.getCollection().countVideos() == 0){
+		int bookCount = this.model.getCollection().countBooks();
+		int videoCount = this.model.getCollection().countVideos();
+		
+		if (bookCount == 0 && videoCount == 0){
 			
 			this.clearDisplay();
-			
+						
 		} else {
 		
 			GridCell[] holdingCells = getHoldingCells();			
@@ -332,17 +362,32 @@ public class Controller {
 			this.mainView.setCells(holdingCells, padCount);
 			this.mainView.updateLibraryGrid(cells);
 			this.mainView.updateStatusBar(getStatusData());
+			
+			
+			// Notify listeners of grid state change.
+			GridState state = GridState.initialised;
+			
+			if (bookCount == 0)				
+				state = GridState.noBooks;
+			
+			else if (videoCount == 0)
+				state = GridState.noVideos;
+						
+			this.mainView.getController().notifyGridListeners(state);
 		
-		}
+		}			
 		
 	}
+	
 	public void clearDisplay(){
-		
-		//this.mainView.toggleControls(false);
+				
 		this.mainView.clearLibraryGrid();
 		this.mainView.updateStatusBar(getStatusData());
 		
+		this.mainView.getController().notifyGridListeners(GridState.empty);
+		
 	}
+	
 	public String toTitleCase(String str){
 		
 		// Convert STRING or string to String
@@ -353,10 +398,11 @@ public class Controller {
 		);
 		
 	}
+	
 	public void handleExitAction(){
 		
-	if (showConfirmDialog("Are you sure you wish to exit the application?"))
-		System.exit(0);
+		if (showConfirmDialog("Are you sure you wish to exit the application?"))
+			System.exit(0);
 
 	}
 	
