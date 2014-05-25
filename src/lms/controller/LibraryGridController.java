@@ -2,9 +2,8 @@ package lms.controller;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.JLabel;
-
+import lms.controller.util.ControllerUtil;
 import lms.view.MainView;
 import lms.view.grid.HoldingCell;
 
@@ -15,14 +14,14 @@ import lms.view.grid.HoldingCell;
  */
 public class LibraryGridController extends MouseAdapter {
 
-	private Controller helper;
+	private ControllerUtil helper;
 	
 	// Only allow 4 cells to be displayed horizontally.
 	public static final int MAX_CELLS_PER_COLUMN = 4;
 	
 	public LibraryGridController(MainView view) {
 		
-		helper = new Controller(view);
+		helper = new ControllerUtil(view);
 		
 	}
 

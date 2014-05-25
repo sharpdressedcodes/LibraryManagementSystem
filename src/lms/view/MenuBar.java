@@ -4,7 +4,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
-import lms.controller.Controller;
+import lms.controller.MainController;
 import lms.controller.MenuBarController;
 
 /**
@@ -86,14 +86,14 @@ public class MenuBar extends JMenuBar {
 		mnuAbout.setMnemonic('a');
 		
 		// Set action commands.
-		mnuExit.setActionCommand(Controller.Actions.exit.name());		
-		mnuInit.setActionCommand(Controller.Actions.init.name());
-		mnuReset.setActionCommand(Controller.Actions.reset.name());
-		mnuAddBook.setActionCommand(Controller.Actions.addBook.name());
-		mnuRemoveBook.setActionCommand(Controller.Actions.removeBook.name());
-		mnuAddVideo.setActionCommand(Controller.Actions.addVideo.name());
-		mnuRemoveVideo.setActionCommand(Controller.Actions.removeVideo.name());
-		mnuAbout.setActionCommand(Controller.Actions.about.name());
+		mnuExit.setActionCommand(MainController.CommandActions.exit.name());		
+		mnuInit.setActionCommand(MainController.CommandActions.init.name());
+		mnuReset.setActionCommand(MainController.CommandActions.reset.name());
+		mnuAddBook.setActionCommand(MainController.CommandActions.addBook.name());
+		mnuRemoveBook.setActionCommand(MainController.CommandActions.removeBook.name());
+		mnuAddVideo.setActionCommand(MainController.CommandActions.addVideo.name());
+		mnuRemoveVideo.setActionCommand(MainController.CommandActions.removeVideo.name());
+		mnuAbout.setActionCommand(MainController.CommandActions.about.name());
 		
 		// Add ActionListeners.
 		mnuExit.addActionListener(controller);

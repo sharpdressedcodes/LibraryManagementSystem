@@ -2,9 +2,8 @@ package lms.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JOptionPane;
-
+import lms.controller.util.ControllerUtil;
 import lms.model.grid.listener.GridListener;
 import lms.view.MainView;
 import lms.view.MenuBar;
@@ -18,7 +17,7 @@ public class MenuBarController implements ActionListener, GridListener {
 
 	//private LMSModel model;
 	private MainView mainView;
-	private Controller helper;
+	private ControllerUtil helper;
 	private MenuBar menuBar;
 	
 	public MenuBarController(MenuBar menuBar) {
@@ -26,7 +25,7 @@ public class MenuBarController implements ActionListener, GridListener {
 		this.menuBar = menuBar;
 		mainView = menuBar.getMainView();
 		//this.model = this.mainView.getModel();
-		helper = new Controller(mainView);
+		helper = new ControllerUtil(mainView);
 		
 		// Tell the main controller that we want to be notified
 		// when the grid state changes.
@@ -115,28 +114,28 @@ public class MenuBarController implements ActionListener, GridListener {
 
 		// Pass the buck to the internal implementations.
 		
-		if (e.getActionCommand().equals(Controller.Actions.exit.name()))
+		if (e.getActionCommand().equals(MainController.CommandActions.exit.name()))
 			handleExitAction(e);
 		
-		else if (e.getActionCommand().equals(Controller.Actions.init.name()))
+		else if (e.getActionCommand().equals(MainController.CommandActions.init.name()))
 			handleInitAction(e);
 		
-		else if (e.getActionCommand().equals(Controller.Actions.reset.name()))
+		else if (e.getActionCommand().equals(MainController.CommandActions.reset.name()))
 			handleResetAction(e);
 		
-		else if (e.getActionCommand().equals(Controller.Actions.addBook.name()))
+		else if (e.getActionCommand().equals(MainController.CommandActions.addBook.name()))
 			handleAddBookAction(e);
 		
-		else if (e.getActionCommand().equals(Controller.Actions.removeBook.name()))
+		else if (e.getActionCommand().equals(MainController.CommandActions.removeBook.name()))
 			handleRemoveBookAction(e);
 		
-		else if (e.getActionCommand().equals(Controller.Actions.addVideo.name()))
+		else if (e.getActionCommand().equals(MainController.CommandActions.addVideo.name()))
 			handleAddVideoAction(e);
 		
-		else if (e.getActionCommand().equals(Controller.Actions.removeVideo.name()))
+		else if (e.getActionCommand().equals(MainController.CommandActions.removeVideo.name()))
 			handleRemoveVideoAction(e);	
 		
-		else if (e.getActionCommand().equals(Controller.Actions.about.name()))
+		else if (e.getActionCommand().equals(MainController.CommandActions.about.name()))
 			handleAboutAction(e);	
 
 	}

@@ -14,6 +14,8 @@ public class StatusBar extends JPanel {
 
 	private JLabel label;	
 	//private MainView mainView;
+	
+	public final static String DEFAULT_FORMAT = "Collection Code: [%s] | Total Books: [%s] | Total Videos: [%s]";
 		
 	public StatusBar(MainView view) {
 		
@@ -33,19 +35,21 @@ public class StatusBar extends JPanel {
 		return label.getText();
 		
 	}
+	
 	public void setText(String newValue){
 		
 		label.setText(newValue);
 		
 	}
-	public String getToolTipText(){
-		
-		return label.getToolTipText();
-		
-	}
-	public void setToolTipText(String newValue){
-		
-		label.setToolTipText(newValue);
+	
+	public void setText(String[] data){
+	
+		label.setText(String.format(
+			DEFAULT_FORMAT, 
+			data[0],
+			data[1],
+			data[2]
+		));
 		
 	}
 

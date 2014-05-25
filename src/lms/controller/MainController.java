@@ -4,9 +4,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
-
+import lms.controller.util.ControllerUtil;
 import lms.model.grid.listener.GridListener;
 import lms.view.MainView;
+import lms.view.grid.GridCell;
 
 /**
  * @author Greg Kappatos
@@ -17,15 +18,77 @@ public class MainController extends WindowAdapter {
 
 	//private LMSModel model;
 	//private MainView mainView;
-	private Controller helper;
+	private ControllerUtil helper;
 	private List<GridListener> gridListeners;
+	private GridCell[] cells;
+	private SortActions sortOrder;
+	private int totalCells;
 	
+	// Actions used by the toolBar buttons and the menuBar items.
+	public static enum CommandActions {
+		exit,
+		init,
+		reset,
+		addBook,
+		removeBook,
+		addVideo,
+		removeVideo,
+		about,
+		removeHolding
+	}
+	
+	// Actions used by radioButtons.
+	public static enum SortActions {
+		none,
+		code,
+		type
+	}
+		
 	public MainController(MainView view) {
 		
 		//this.mainView = view;
 		//this.model = this.mainView.getModel();
-		helper = new Controller(view);
+		helper = new ControllerUtil(view);
 		gridListeners = new ArrayList<GridListener>();
+		
+		totalCells = 0;
+		cells = null;
+		sortOrder = SortActions.none;
+		
+	}
+	
+	public SortActions getSortOrder(){
+		
+		return sortOrder;
+		
+	}
+	
+	public void setSortOrder(SortActions newValue){
+		
+		sortOrder = newValue;
+		
+	}
+	
+	public GridCell[] getCells(){
+		
+		return cells;
+		
+	}
+	
+	public void setCells(GridCell[] cells, int emptyCellCount){
+		
+		this.cells = cells;	
+		totalCells = emptyCellCount;
+		
+		// Only add the length if the cells aren't null.
+		if (cells != null)
+			totalCells += cells.length;
+		
+	}
+	
+	public int getTotalCells(){
+		
+		return totalCells;
 		
 	}
 	
@@ -61,7 +124,7 @@ public class MainController extends WindowAdapter {
 		for (GridListener listener : gridListeners)
 			listener.gridChanged(state);
 		
-	}
+	}	
 	
 	public void handleExitAction(WindowEvent e){
 		
@@ -78,6 +141,4 @@ public class MainController extends WindowAdapter {
 		
 	}
 	
-	
-
 }

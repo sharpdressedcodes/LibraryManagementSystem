@@ -4,9 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 import javax.swing.JFrame;
-import lms.controller.Controller;
 import lms.controller.MainController;
-import lms.controller.ToolBarOptionsController;
+import lms.controller.util.ControllerUtil;
 import lms.model.facade.LMSModel;
 import lms.model.grid.listener.GridListener.GridState;
 import lms.view.grid.EmptyCell;
@@ -26,12 +25,7 @@ public class MainView extends JFrame {
 	private LibraryGrid libraryGrid; 	// sub-view (JPanel)
 	private StatusBar statusBar; 		// sub-view (JPanel)
 	private MainController controller;
-	private Controller helper;
-	private GridCell[] cells;
-	private int sortOrder;
-	private int totalCells;	
-		
-	private final static String STATUSBAR_FORMAT = "Collection Code: [%s] | Total Books: [%s] | Total Videos: [%s]";
+	private ControllerUtil helper;		
 
 	public MainView(LMSModel model) throws HeadlessException {
 		
@@ -39,9 +33,7 @@ public class MainView extends JFrame {
 	
 		this.model = model;
 		controller = new MainController(this);
-		helper = new Controller(this);
-		cells = null;
-		sortOrder = ToolBarOptionsController.SortActions.none.ordinal();									
+		helper = new ControllerUtil(this);									
 		menuBar = new MenuBar(this);
 		toolBar = new ToolBar(this);
 		libraryGrid = new LibraryGrid(this);
@@ -110,42 +102,17 @@ public class MainView extends JFrame {
 		
 	}
 	
-	public int getSortOrder(){
-		
-		return sortOrder;
-		
-	}
-	
-	public void setSortOrder(int newValue){
-		
-		sortOrder = newValue;
-		
-	}
-	
-	public GridCell[] getCells(){
-		
-		return cells;
-		
-	}
-	
-	public void setCells(GridCell[] cells, int emptyCellCount){
-		
-		this.cells = cells;
-		totalCells = this.cells.length + emptyCellCount;
-		
-	}
-	
 	public void refreshLibraryGrid(){
 		
 		// Only refresh if there are cells present.
-		if (this.cells != null){			
+		if (controller.getCells() != null){			
 						
 			// Sort the cells.
-			GridCell[] sortedCells = helper.sortHoldingCells(this.cells);			
-			GridCell[] cells = new GridCell[totalCells];
+			GridCell[] sortedCells = helper.sortHoldingCells(controller.getCells());			
+			GridCell[] cells = new GridCell[controller.getTotalCells()];
 			
 			// Set cells to current cells. Then append EmptyCells.
-			for (int i = 0; i < totalCells; i++)
+			for (int i = 0; i < controller.getTotalCells(); i++)
 				cells[i] = i < sortedCells.length? sortedCells[i] : new EmptyCell();
 			
 			// Update.
@@ -158,9 +125,7 @@ public class MainView extends JFrame {
 	
 	public void clearLibraryGrid(){
 
-		cells = null;
-		totalCells = 0;
-		
+		controller.setCells(null, 0);
 		libraryGrid.clear();
 		validate();
 		
@@ -175,12 +140,7 @@ public class MainView extends JFrame {
 	
 	public void updateStatusBar(String[] data){
 		
-		statusBar.setText(String.format(
-				STATUSBAR_FORMAT, 
-				data[0],
-				data[1],
-				data[2]
-		));
+		statusBar.setText(data);
 		validate();
 		
 	}

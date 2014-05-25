@@ -1,9 +1,9 @@
-package lms.controller;
+package lms.controller.util;
 
 import java.util.Arrays;
-
 import javax.swing.JOptionPane;
-
+import lms.controller.LibraryGridController;
+import lms.controller.MainController;
 import lms.model.Book;
 import lms.model.Holding;
 import lms.model.LibraryCollection;
@@ -26,25 +26,15 @@ import lms.view.test.Tester;
  * @date 25 May 2014
  * 
  */
-public class Controller {
+public class ControllerUtil {
 
 	private LMSModel model;
 	private MainView mainView; 
 	
-	// Actions that will be used by the toolBar buttons and the menuBar items.
-	public static enum Actions {
-		exit,
-		init,
-		reset,
-		addBook,
-		removeBook,
-		addVideo,
-		removeVideo,
-		about,
-		removeHolding
-	}
+	// Don't show more than this when displaying confirmation dialogs.
+	public static final int MAX_RESULTS = 50;
 	
-	public Controller(MainView view) {
+	public ControllerUtil(MainView view) {
 		
 		mainView = view;
 		model = mainView.getModel();		
@@ -141,9 +131,10 @@ public class Controller {
 		
 		// Confirm that the user really wants to remove this item.
 		if (showConfirmDialog(String.format(
-				"Permanently remove this %s?\n%s", 
+				"Permanently remove this %s?\n%s - %s", 
 				toTitleCase(model.getHolding(holdingId).getType()), 
-				holdingId
+				holdingId,
+				model.getHolding(holdingId).getTitle()
 			))){
 		
 			// Remove holding and update display.
@@ -213,22 +204,34 @@ public class Controller {
 			// Get selection from dialog.
 			holdingIds = dialog.getSelectedHoldingIds();
 			
-			// If we have valid data, convert it to a
-			// comma separated string.
+			// If we have valid data, convert it to something more readable.
 			if (holdingIds != null && holdingIds.length > 0){
+
+				int i = 0;
 				StringBuffer sb = new StringBuffer();
-				
-				// Append the data with the comma
-				for (int holdingId : holdingIds)
-					sb.append(String.format("%s,", holdingId));
-				
-				// Trim last comma
-				if (sb.length() > 0)
-					sb.deleteCharAt(sb.length() - 1);
+
+				// Loop through, grabbing the holding data to display to user.
+				for (int holdingId : holdingIds){
+					
+					Holding holding = model.getHolding(holdingId);
+					sb.append(String.format(
+						"%s - %s\n", 
+						holding.getCode(), 
+						holding.getTitle()
+					));
+					
+					// Have we reached the limit? 
+					// We do not want this dialog taking up the whole screen.				
+					if (++i >= MAX_RESULTS){
+						sb.append(holdingIds.length - i + " more\n");
+						break;
+					}
+					
+				}			
 				
 				// Show the confirmation with the selected id's.
 				if (showConfirmDialog(String.format(
-						"Permanently remove these %ss?\n(%s)", 
+						"Permanently remove these %ss?\n\n%s\n", 
 						type, 
 						sb.toString()
 					))){
@@ -302,7 +305,7 @@ public class Controller {
 	
 	public void resetLibraryCollection(){
 		
-		GridCell[] cells = mainView.getCells();
+		GridCell[] cells = mainView.getController().getCells();
 		
 		// Only reset if we can actually reset.
 		// If we can, confirm this with the user first.
@@ -373,7 +376,7 @@ public class Controller {
 		// Unsorted cells are just passed back to the caller.
 		
 		// Sort by CODE
-		if (mainView.getSortOrder() == ToolBarOptionsController.SortActions.code.ordinal()){
+		if (mainView.getController().getSortOrder() == MainController.SortActions.code){
 			
 			HoldingCell[] holdingCells = convertCells(cells);
 			Arrays.sort(holdingCells, HoldingCell.CodeComparator);
@@ -381,7 +384,7 @@ public class Controller {
 			cells = holdingCells;
 			
 		// Sort by TYPE
-		} else if (mainView.getSortOrder() == ToolBarOptionsController.SortActions.type.ordinal()){
+		} else if (mainView.getController().getSortOrder() == MainController.SortActions.type){
 			
 			HoldingCell[] holdingCells = convertCells(cells);
 			Arrays.sort(holdingCells, HoldingCell.TypeComparator);
@@ -483,7 +486,7 @@ public class Controller {
 			GridCell[] cells = createSortAndCombineCells(holdingCells, padCount);			
 			
 			// Update the LibraryGrid and StatusBar.
-			mainView.setCells(holdingCells, padCount);
+			mainView.getController().setCells(holdingCells, padCount);
 			mainView.updateLibraryGrid(cells);
 			mainView.updateStatusBar(getStatusData());
 						

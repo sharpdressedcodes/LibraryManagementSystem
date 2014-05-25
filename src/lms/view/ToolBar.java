@@ -7,7 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import lms.controller.Controller;
+import lms.controller.MainController;
 import lms.controller.ToolBarButtonsController;
 import lms.controller.ToolBarOptionsController;
 
@@ -113,11 +113,11 @@ public class ToolBar extends JPanel {
 		add(rightPanel, BorderLayout.EAST);
 				
 		// Set action commands.
-		cmdInit.setActionCommand(Controller.Actions.init.name());
-		cmdAddBook.setActionCommand(Controller.Actions.addBook.name());
-		cmdRemoveBook.setActionCommand(Controller.Actions.removeBook.name());
-		cmdAddVideo.setActionCommand(Controller.Actions.addVideo.name());
-		cmdRemoveVideo.setActionCommand(Controller.Actions.removeVideo.name());
+		cmdInit.setActionCommand(MainController.CommandActions.init.name());
+		cmdAddBook.setActionCommand(MainController.CommandActions.addBook.name());
+		cmdRemoveBook.setActionCommand(MainController.CommandActions.removeBook.name());
+		cmdAddVideo.setActionCommand(MainController.CommandActions.addVideo.name());
+		cmdRemoveVideo.setActionCommand(MainController.CommandActions.removeVideo.name());
 				
 		// Add Button listeners.
 		cmdInit.addActionListener(buttonController);
@@ -127,9 +127,9 @@ public class ToolBar extends JPanel {
 		cmdRemoveVideo.addActionListener(buttonController);
 		
 		// Set action commands.
-		optNone.setActionCommand(ToolBarOptionsController.SortActions.none.name());
-		optCode.setActionCommand(ToolBarOptionsController.SortActions.code.name());
-		optType.setActionCommand(ToolBarOptionsController.SortActions.type.name());
+		optNone.setActionCommand(MainController.SortActions.none.name());
+		optCode.setActionCommand(MainController.SortActions.code.name());
+		optType.setActionCommand(MainController.SortActions.type.name());
 		
 		// Add RadioButton listeners.
 		optNone.addActionListener(optionsController);
