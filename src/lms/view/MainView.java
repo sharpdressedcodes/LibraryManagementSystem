@@ -3,9 +3,7 @@ package lms.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
-
 import javax.swing.JFrame;
-
 import lms.controller.Controller;
 import lms.controller.MainController;
 import lms.controller.ToolBarOptionsController;
@@ -14,20 +12,25 @@ import lms.model.grid.listener.GridListener.GridState;
 import lms.view.grid.EmptyCell;
 import lms.view.grid.GridCell;
 
+/**
+ * @author Greg Kappatos
+ * @date 25 May 2014
+ * 
+ */
 @SuppressWarnings("serial")
 public class MainView extends JFrame {
 
 	private LMSModel model;
 	private MenuBar menuBar;
-	private ToolBar toolBar; // sub-view (JPanel)
-	private LibraryGrid libraryGrid; // sub-view (JPanel)
-	private StatusBar statusBar;
+	private ToolBar toolBar; 			// sub-view (JPanel)
+	private LibraryGrid libraryGrid; 	// sub-view (JPanel)
+	private StatusBar statusBar; 		// sub-view (JPanel)
 	private MainController controller;
 	private Controller helper;
 	private GridCell[] cells;
 	private int sortOrder;
 	private int totalCells;	
-	
+		
 	private final static String STATUSBAR_FORMAT = "Collection Code: [%s] | Total Books: [%s] | Total Videos: [%s]";
 
 	public MainView(LMSModel model) throws HeadlessException {
@@ -35,108 +38,119 @@ public class MainView extends JFrame {
 		super("Library Management System");
 	
 		this.model = model;
-		this.controller = new MainController(this);
-		this.helper = new Controller(this);
-		this.cells = null;
-		this.sortOrder = ToolBarOptionsController.SortActions.none.ordinal();
-						
-		this.setLayout(new BorderLayout());
+		controller = new MainController(this);
+		helper = new Controller(this);
+		cells = null;
+		sortOrder = ToolBarOptionsController.SortActions.none.ordinal();									
+		menuBar = new MenuBar(this);
+		toolBar = new ToolBar(this);
+		libraryGrid = new LibraryGrid(this);
+		statusBar = new StatusBar(this);
 		
-		this.menuBar = new MenuBar(this);
-		this.toolBar = new ToolBar(this);
-		this.libraryGrid = new LibraryGrid(this);
-		this.statusBar = new StatusBar(this);
-		
+		// Set default values.
 		updateStatusBar(new String[] {"-", "0", "0"});
 		
-		this.setJMenuBar(this.menuBar);
+		// Set appearance.
+		setLayout(new BorderLayout());
+		setJMenuBar(menuBar);
 
-		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		this.addWindowListener(this.controller);
+		// Window listener.
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		addWindowListener(controller);
 		
-		this.add(this.toolBar, BorderLayout.NORTH);
-		this.add(this.libraryGrid, BorderLayout.CENTER);
-		this.add(this.statusBar, BorderLayout.SOUTH);
+		// Add components.
+		add(toolBar, BorderLayout.NORTH);
+		add(libraryGrid, BorderLayout.CENTER);
+		add(statusBar, BorderLayout.SOUTH);
 				
-		this.controller.notifyGridListeners(GridState.uninitialised);
+		// Notify listeners.
+		controller.notifyGridListeners(GridState.uninitialised);
 		
-		this.pack();
-		this.setSize(this.getWidth(), this.getHeight() + 500);
-		this.setMinimumSize(new Dimension(
-				this.getWidth(), 
-				this.menuBar.getHeight() + this.toolBar.getHeight() + this.statusBar.getHeight() + 38
+		// Set size, give ourselves some room for the grid, then set
+		// the minimum size to prevent the user making the window too small.
+		pack();
+		setSize(getWidth(), getHeight() + 500);
+		setMinimumSize(new Dimension(
+			getWidth(), 
+			menuBar.getHeight() + toolBar.getHeight() + statusBar.getHeight() + 38
 		));
-		this.setLocationRelativeTo(null);
+		
+		// Center frame.
+		setLocationRelativeTo(null);
 		
 	}
 	
 	public LMSModel getModel(){
 		
-		return this.model;
+		return model;
 		
 	}
 	
 	public ToolBar getToolBar(){
 		
-		return this.toolBar;
+		return toolBar;
 		
 	}
 	
 	public LibraryGrid getLibraryGrid(){
 		
-		return this.libraryGrid;
+		return libraryGrid;
 		
 	}
 	
 	public StatusBar getStatusBar(){
 		
-		return this.statusBar;
+		return statusBar;
 		
 	}
 	
 	public MainController getController(){
 		
-		return this.controller;		
+		return controller;		
 		
 	}
 	
 	public int getSortOrder(){
 		
-		return this.sortOrder;
+		return sortOrder;
 		
 	}
 	
 	public void setSortOrder(int newValue){
 		
-		this.sortOrder = newValue;
+		sortOrder = newValue;
 		
 	}
 	
 	public GridCell[] getCells(){
 		
-		return this.cells;
+		return cells;
 		
 	}
 	
 	public void setCells(GridCell[] cells, int emptyCellCount){
 		
 		this.cells = cells;
-		this.totalCells = this.cells.length + emptyCellCount;
+		totalCells = this.cells.length + emptyCellCount;
 		
 	}
 	
 	public void refreshLibraryGrid(){
 		
+		// Only refresh if there are cells present.
 		if (this.cells != null){			
 						
-			GridCell[] sortedCells = this.helper.sortHoldingCells(this.cells);			
-			GridCell[] cells = new GridCell[this.totalCells];
+			// Sort the cells.
+			GridCell[] sortedCells = helper.sortHoldingCells(this.cells);			
+			GridCell[] cells = new GridCell[totalCells];
 			
-			for (int i = 0; i < this.totalCells; i++)
+			// Set cells to current cells. Then append EmptyCells.
+			for (int i = 0; i < totalCells; i++)
 				cells[i] = i < sortedCells.length? sortedCells[i] : new EmptyCell();
 			
-			this.libraryGrid.refresh(cells);
-			this.validate();
+			// Update.
+			libraryGrid.refresh(cells);
+			validate();
 			
 		}
 		
@@ -144,30 +158,30 @@ public class MainView extends JFrame {
 	
 	public void clearLibraryGrid(){
 
-		this.cells = null;
-		this.totalCells = 0;
+		cells = null;
+		totalCells = 0;
 		
-		this.libraryGrid.clear();
-		this.validate();
+		libraryGrid.clear();
+		validate();
 		
 	}
 	
 	public void updateLibraryGrid(GridCell[] cells){
 				
-		this.libraryGrid.update(cells);
-		this.validate();
+		libraryGrid.update(cells);
+		validate();
 		
 	}
 	
 	public void updateStatusBar(String[] data){
 		
-		this.statusBar.setText(String.format(
+		statusBar.setText(String.format(
 				STATUSBAR_FORMAT, 
 				data[0],
 				data[1],
 				data[2]
 		));
-		this.validate();
+		validate();
 		
 	}
 		

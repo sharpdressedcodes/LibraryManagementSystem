@@ -1,13 +1,25 @@
 package lms.model.holding.visitor;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import lms.model.Book;
 import lms.model.Video;
-import lms.view.grid.*;
+import lms.view.grid.BookCell;
+import lms.view.grid.GridCell;
+import lms.view.grid.VideoCell;
 
+/**
+ * @author Greg Kappatos
+ * @date 25 May 2014
+ * 
+ */
 public class HoldingVisitor implements Visitor {
 
+	// Simple class that counts number of books and videos,
+	// and returns their values and count.
+	// Also creates appropriate HoldingCells.
+	
 	private Map<Integer, Book> books;
 	private Map<Integer, Video> videos;
 	private Map<Integer, GridCell> cells;

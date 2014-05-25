@@ -1,11 +1,20 @@
 package lms.model.grid.visitor;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import lms.view.grid.*;
+import lms.view.grid.EmptyCell;
+import lms.view.grid.HoldingCell;
 
+/**
+ * @author Greg Kappatos
+ * @date 25 May 2014
+ * 
+ */
 public class HoldingCellVisitor implements Visitor {
 
+	// Simple class to separate the EmptyCells and the HoldingCells.
+	
 	private Map<Integer, HoldingCell> holdingCells;
 	private Map<Integer, EmptyCell> emptyCells;
 	

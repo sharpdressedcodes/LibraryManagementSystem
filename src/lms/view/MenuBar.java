@@ -1,9 +1,17 @@
 package lms.view;
 
-import javax.swing.*;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 import lms.controller.Controller;
 import lms.controller.MenuBarController;
 
+/**
+ * @author Greg Kappatos
+ * @date 25 May 2014
+ * 
+ */
 @SuppressWarnings("serial")
 public class MenuBar extends JMenuBar {
 
@@ -37,6 +45,7 @@ public class MenuBar extends JMenuBar {
 		mainView = view;
 		controller = new MenuBarController(this);
 		
+		// Main Menus.
 		mnuFile = new JMenu("File");
 		mnuLibrary = new JMenu("Library");
 		mnuHoldings = new JMenu("Holdings");
@@ -58,7 +67,7 @@ public class MenuBar extends JMenuBar {
 		// mnuHelp sub items.
 		mnuAbout = new JMenuItem("About");
 		
-		
+		// Set mnemonics.
 		mnuFile.setMnemonic('F');
 		mnuLibrary.setMnemonic('L');
 		mnuHoldings.setMnemonic('H');
@@ -66,7 +75,17 @@ public class MenuBar extends JMenuBar {
 		
 		mnuExit.setMnemonic('x');
 		
-		// set actions
+		mnuInit.setMnemonic('i');
+		mnuReset.setMnemonic('r');
+		
+		mnuAddBook.setMnemonic('a');
+		mnuRemoveBook.setMnemonic('r');
+		mnuAddVideo.setMnemonic('d');
+		mnuRemoveVideo.setMnemonic('m');
+		
+		mnuAbout.setMnemonic('a');
+		
+		// Set action commands.
 		mnuExit.setActionCommand(Controller.Actions.exit.name());		
 		mnuInit.setActionCommand(Controller.Actions.init.name());
 		mnuReset.setActionCommand(Controller.Actions.reset.name());
@@ -76,6 +95,7 @@ public class MenuBar extends JMenuBar {
 		mnuRemoveVideo.setActionCommand(Controller.Actions.removeVideo.name());
 		mnuAbout.setActionCommand(Controller.Actions.about.name());
 		
+		// Add ActionListeners.
 		mnuExit.addActionListener(controller);
 		mnuInit.addActionListener(controller);
 		mnuReset.addActionListener(controller);
@@ -85,7 +105,7 @@ public class MenuBar extends JMenuBar {
 		mnuRemoveVideo.addActionListener(controller);
 		mnuAbout.addActionListener(controller);
 		
-		
+		// Add sub menus.
 		mnuFile.add(mnuExit);
 		
 		mnuLibrary.add(mnuInit);
@@ -99,6 +119,7 @@ public class MenuBar extends JMenuBar {
 		
 		mnuHelp.add(mnuAbout);
 		
+		// Add menus.
 		add(mnuFile);
 		add(mnuLibrary);
 		add(mnuHoldings);
@@ -108,7 +129,7 @@ public class MenuBar extends JMenuBar {
 
 	public MainView getMainView(){
 
-		return this.mainView;
+		return mainView;
 		
 	}
 	

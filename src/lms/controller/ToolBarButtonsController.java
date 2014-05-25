@@ -2,12 +2,18 @@ package lms.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import lms.model.Holding;
 import lms.model.facade.LMSModel;
 import lms.model.grid.listener.GridListener;
 import lms.view.MainView;
 import lms.view.ToolBar;
 
+/**
+ * @author Greg Kappatos
+ * @date 25 May 2014
+ * 
+ */
 public class ToolBarButtonsController implements ActionListener, GridListener {
 
 	private ToolBar toolBar;
@@ -18,11 +24,13 @@ public class ToolBarButtonsController implements ActionListener, GridListener {
 	public ToolBarButtonsController(ToolBar toolBar) {
 		
 		this.toolBar = toolBar;
-		this.mainView = toolBar.getMainView();
-		this.model = this.mainView.getModel();
-		this.helper = new Controller(this.mainView);
+		mainView = toolBar.getMainView();
+		model = mainView.getModel();
+		helper = new Controller(mainView);
 		
-		this.mainView.getController().addGridListener(this);
+		// Tell the main controller that we want to be notified
+		// when the grid state changes.
+		mainView.getController().addGridListener(this);
 		
 	}
 	
@@ -31,8 +39,8 @@ public class ToolBarButtonsController implements ActionListener, GridListener {
 		Holding[] holdings = null;
 		
 		// Make sure there is already a collection.
-		if (this.model.getCollection() != null)
-				holdings = this.model.getCollection().getAllHoldings();
+		if (model.getCollection() != null)
+			holdings = model.getCollection().getAllHoldings();
 		
 		// If there are already holdings, then this command is actually 'reset'.
 		if (holdings != null && holdings.length > 0){
@@ -77,7 +85,8 @@ public class ToolBarButtonsController implements ActionListener, GridListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		// Route command to method.
+		// Pass the buck to the internal implementations.
+		
 		if (e.getActionCommand().equals(Controller.Actions.init.name()))
 			handleInitAction(e);
 		
@@ -99,6 +108,10 @@ public class ToolBarButtonsController implements ActionListener, GridListener {
 	@Override
 	public void gridChanged(GridState state) {
 		
+		// Change the enabled state on certain menu items
+		// based on the current grid state.
+		
+		// No items, no collection - nothing.		
 		if (state.equals(GridState.uninitialised)){
 			
 			toolBar.getAddBookButton().setEnabled(false);
@@ -106,6 +119,7 @@ public class ToolBarButtonsController implements ActionListener, GridListener {
 			toolBar.getAddVideoButton().setEnabled(false);
 			toolBar.getRemoveVideoButton().setEnabled(false);
 			
+		// Collection has been created.
 		} else if (state.equals(GridState.empty)){
 			
 			toolBar.getAddBookButton().setEnabled(true);
@@ -113,6 +127,7 @@ public class ToolBarButtonsController implements ActionListener, GridListener {
 			toolBar.getAddVideoButton().setEnabled(true);
 			toolBar.getRemoveVideoButton().setEnabled(false);
 			
+		// No books.
 		} else if (state.equals(GridState.noBooks)){
 			
 			toolBar.getAddBookButton().setEnabled(true);
@@ -120,6 +135,7 @@ public class ToolBarButtonsController implements ActionListener, GridListener {
 			toolBar.getAddVideoButton().setEnabled(true);
 			toolBar.getRemoveVideoButton().setEnabled(true);
 			
+		// No videos.
 		} else if (state.equals(GridState.noVideos)){
 			
 			toolBar.getAddBookButton().setEnabled(true);
@@ -127,6 +143,7 @@ public class ToolBarButtonsController implements ActionListener, GridListener {
 			toolBar.getAddVideoButton().setEnabled(true);
 			toolBar.getRemoveVideoButton().setEnabled(false);
 			
+		// Fully operational.
 		} else if (state.equals(GridState.initialised)){
 			
 			toolBar.getAddBookButton().setEnabled(true);

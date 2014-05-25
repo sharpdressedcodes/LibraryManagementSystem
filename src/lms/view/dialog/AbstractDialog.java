@@ -1,12 +1,23 @@
 package lms.view.dialog;
 
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+/**
+ * @author Greg Kappatos
+ * @date 25 May 2014
+ * 
+ */
 @SuppressWarnings("serial")
 public abstract class AbstractDialog extends JDialog implements ActionListener {
 
@@ -20,7 +31,7 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 	private JPanel pnlContent;
 	private JFrame frame; 	
 	
-	public static final int DEFAULT_TEXTFIELD_COLUMNS = 20;
+	public static final int DEFAULT_TEXTFIELD_COLUMNS = 20; // JTextField width
  	public static enum Actions {
 		OK,
 		Cancel
@@ -37,24 +48,29 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		
 		this.frame = frame;				
 		
+		// Create components.
 		result = Actions.Cancel;
 		cmdOk = new JButton(Actions.OK.name());
 		cmdCancel = new JButton(Actions.Cancel.name());
-		
-		cmdOk.setActionCommand(Actions.OK.name());
-		cmdCancel.setActionCommand(Actions.Cancel.name());
-		
-		cmdOk.addActionListener(this);
-		cmdCancel.addActionListener(this);
-		
-		cmdOk.setMnemonic('O');
-		cmdCancel.setMnemonic('C');
 		
 		pnlContent = new JPanel();
 		mainPanel = new JPanel();		
 		pnlButtons = new JPanel();
 		pnlInnerButtons = new JPanel();
-
+		
+		// Set action commands.
+		cmdOk.setActionCommand(Actions.OK.name());
+		cmdCancel.setActionCommand(Actions.Cancel.name());
+		
+		// Add button listeners.
+		cmdOk.addActionListener(this);
+		cmdCancel.addActionListener(this);
+		
+		// Set mnemonics.
+		cmdOk.setMnemonic('O');
+		cmdCancel.setMnemonic('C');
+				
+		// Add components.
 		pnlInnerButtons.add(cmdOk);
 		pnlInnerButtons.add(cmdCancel);
 		
@@ -67,6 +83,7 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		pnlContent.setLayout(new GridLayout(0,1));
 		pnlContent.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));		
 		
+		// Set default button.
 		getRootPane().setDefaultButton(cmdOk);
 		
 	}
@@ -90,7 +107,12 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		
 		add(mainPanel);
 		
+		// By default, I have chosen to disable this button until
+		// valid data has been entered into the dialog.
+		// To override this behavior, just enable it in the
+		// sub classed constructor.
 		cmdOk.setEnabled(false);
+		// Call checkComponents immediately.
 		checkComponents();
 		
 		reDisplay();
@@ -102,8 +124,8 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 		
 		pack();
 		setMinimumSize(new Dimension(
-				pnlInnerButtons.getWidth() + 27, 
-				pnlContent.getHeight() + (pnlButtons.getHeight() << 1) + 12
+			pnlInnerButtons.getWidth() + 27, 
+			pnlContent.getHeight() + (pnlButtons.getHeight() << 1) + 12
 		));
 		
 		setLocationRelativeTo(frame);
@@ -122,6 +144,8 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 	} 
 	
 	public DocumentListener createDocumentListener(){
+		
+		// This is used to see if the OK button can be enabled or not.
 		
 		DocumentListener listener = new DocumentListener(){
 
@@ -165,6 +189,8 @@ public abstract class AbstractDialog extends JDialog implements ActionListener {
 	// ActionListener implementation.
 	@Override
 	public void actionPerformed(ActionEvent e){
+		
+		// Pass the buck to the internal implementations.
 		
 		if (e.getActionCommand().equals(Actions.OK.name()))
 			handleOkAction();

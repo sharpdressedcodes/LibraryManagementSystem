@@ -9,6 +9,11 @@ import lms.model.grid.listener.GridListener;
 import lms.view.MainView;
 import lms.view.MenuBar;
 
+/**
+ * @author Greg Kappatos
+ * @date 25 May 2014
+ * 
+ */
 public class MenuBarController implements ActionListener, GridListener {
 
 	//private LMSModel model;
@@ -19,23 +24,26 @@ public class MenuBarController implements ActionListener, GridListener {
 	public MenuBarController(MenuBar menuBar) {
 		
 		this.menuBar = menuBar;
-		this.mainView = menuBar.getMainView();
+		mainView = menuBar.getMainView();
 		//this.model = this.mainView.getModel();
-		this.helper = new Controller(this.mainView);
+		helper = new Controller(mainView);
 		
-		this.mainView.getController().addGridListener(this);
+		// Tell the main controller that we want to be notified
+		// when the grid state changes.
+		mainView.getController().addGridListener(this);
 		
 	}
 	
 	public void handleExitAction(ActionEvent e){
 		
-		this.helper.handleExitAction();
+		helper.handleExitAction();
 		
 	}
 	
 	public void handleInitAction(ActionEvent e){
 		
-		if (this.helper.addLibraryCollection()){
+		// If the collection is added, populate and update the display.
+		if (helper.addLibraryCollection()){
 			
 			helper.populateHoldings();
 			helper.updateDisplay();
@@ -93,7 +101,7 @@ public class MenuBarController implements ActionListener, GridListener {
 		sb.append("lms.controller.MenuBarController:: gridChanged()\n\n");		
 		
 		JOptionPane.showMessageDialog(
-				this.mainView, 
+				mainView, 
 				sb.toString(), 
 				"About", 
 				JOptionPane.INFORMATION_MESSAGE
@@ -105,6 +113,8 @@ public class MenuBarController implements ActionListener, GridListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
+		// Pass the buck to the internal implementations.
+		
 		if (e.getActionCommand().equals(Controller.Actions.exit.name()))
 			handleExitAction(e);
 		
@@ -135,6 +145,10 @@ public class MenuBarController implements ActionListener, GridListener {
 	@Override
 	public void gridChanged(GridState state) {
 		
+		// Change the enabled state on certain menu items
+		// based on the current grid state.
+		
+		// No items, no collection - nothing.
 		if (state.equals(GridState.uninitialised)){
 			
 			menuBar.getResetMenu().setEnabled(false);
@@ -143,6 +157,7 @@ public class MenuBarController implements ActionListener, GridListener {
 			menuBar.getAddVideoMenu().setEnabled(false);
 			menuBar.getRemoveVideoMenu().setEnabled(false);
 			
+		// Collection has been created.
 		} else if (state.equals(GridState.empty)){
 			
 			menuBar.getResetMenu().setEnabled(false);
@@ -151,6 +166,7 @@ public class MenuBarController implements ActionListener, GridListener {
 			menuBar.getAddVideoMenu().setEnabled(true);
 			menuBar.getRemoveVideoMenu().setEnabled(false);
 			
+		// No books.
 		} else if (state.equals(GridState.noBooks)){
 			
 			menuBar.getResetMenu().setEnabled(true);
@@ -159,6 +175,7 @@ public class MenuBarController implements ActionListener, GridListener {
 			menuBar.getAddVideoMenu().setEnabled(true);
 			menuBar.getRemoveVideoMenu().setEnabled(true);
 			
+		// No videos.
 		} else if (state.equals(GridState.noVideos)){
 			
 			menuBar.getResetMenu().setEnabled(true);
@@ -167,6 +184,7 @@ public class MenuBarController implements ActionListener, GridListener {
 			menuBar.getAddVideoMenu().setEnabled(true);
 			menuBar.getRemoveVideoMenu().setEnabled(false);
 			
+		// Fully operational.
 		} else if (state.equals(GridState.initialised)){
 			
 			menuBar.getResetMenu().setEnabled(true);

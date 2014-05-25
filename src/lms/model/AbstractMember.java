@@ -9,174 +9,158 @@ import java.util.*;
 import lms.model.exception.*;
 import lms.model.util.DateUtil;
 
-public abstract class AbstractMember implements Member
-{
+public abstract class AbstractMember implements Member {
 
-   private String id;
-   private String fullName;
-   private int remainingCredit;
-   private String type;
-   private int maxCredit;
+	private String id;
+	private String fullName;
+	private int remainingCredit;
+	private String type;
+	private int maxCredit;
 
-   protected BorrowingHistory history;
-   protected Map<Integer, Holding> currentLoans;
+	protected BorrowingHistory history;
+	protected Map<Integer, Holding> currentLoans;
 
-   public AbstractMember(String id, String fullName, int remainingCredit,
-                         String type)
-   {
+	public AbstractMember(String id, String fullName, int remainingCredit,
+			String type) {
 
-      this.id = id;
-      this.fullName = fullName;
-      this.remainingCredit = this.maxCredit = remainingCredit;
-      this.type = type;
-      this.history = new BorrowingHistory();
-      this.currentLoans = new HashMap<Integer, Holding>();
+		this.id = id;
+		this.fullName = fullName;
+		this.remainingCredit = this.maxCredit = remainingCredit;
+		this.type = type;
+		this.history = new BorrowingHistory();
+		this.currentLoans = new HashMap<Integer, Holding>();
 
-   }
+	}
 
-   // /////////////////////////////////////////////////////////////////
-   // Borrower implementation ////////////////////////////////////////
-   // /////////////////////////////////////////////////////////////////
+	// /////////////////////////////////////////////////////////////////
+	// Borrower implementation ////////////////////////////////////////
+	// /////////////////////////////////////////////////////////////////
 
-   @Override
-   public void borrowHolding(Holding holding)
-            throws InsufficientCreditException, MultipleBorrowingException
-   {
+	@Override
+	public void borrowHolding(Holding holding)
+			throws InsufficientCreditException, MultipleBorrowingException {
 
-      int fee = holding.getDefaultLoanFee();
+		int fee = holding.getDefaultLoanFee();
 
-      // Is this Holding already on loan?
-      // Or has this Holding already been borrowed?
-      if (this.currentLoans.containsKey(holding.getCode())
-          || this.history.getHistoryRecord(holding.getCode()) != null)
-         throw new MultipleBorrowingException();
+		// Is this Holding already on loan?
+		// Or has this Holding already been borrowed?
+		if (this.currentLoans.containsKey(holding.getCode())
+				|| this.history.getHistoryRecord(holding.getCode()) != null)
+			throw new MultipleBorrowingException();
 
-      // Can the member afford to borrow this Holding?
-      else if (this.getRemainingCredit() < fee)
-         throw new InsufficientCreditException();
+		// Can the member afford to borrow this Holding?
+		else if (this.getRemainingCredit() < fee)
+			throw new InsufficientCreditException();
 
-      // All clear, go ahead and borrow.
-      this.calculateRemainingCredit(fee);
-      // Setting date to not null puts Holding into 'on loan' state.
-      holding.setBorrowDate(DateUtil.getInstance().getDate());
-      this.currentLoans.put(holding.getCode(), holding);
+		// All clear, go ahead and borrow.
+		this.calculateRemainingCredit(fee);
+		// Setting date to not null puts Holding into 'on loan' state.
+		holding.setBorrowDate(DateUtil.getInstance().getDate());
+		this.currentLoans.put(holding.getCode(), holding);
 
-   }
+	}
 
-   @Override
-   public void returnHolding(Holding holding) throws OverdrawnCreditException
-   {
+	@Override
+	public void returnHolding(Holding holding) throws OverdrawnCreditException {
 
-      int fee = holding.calculateLateFee();
+		int fee = holding.calculateLateFee();
 
-      // Return the item, regardless of if the credit goes into negative.
-     
-     // Clone the holding because the date is about to be set to null.
-     // This is to keep track of when it was borrowed.
-     this.history.addHistoryRecord(new HistoryRecord(
-    		 (Holding) holding.clone(), 
-    		 holding.getDefaultLoanFee() + fee
-     ));
+		// Return the item, regardless of if the credit goes into negative.
 
-      // Set the date to null (this puts the item state in 'not on loan').
-      holding.setBorrowDate(null);
-      // Remove any late fees incurred.
-      this.calculateRemainingCredit(fee);
-      this.currentLoans.remove(holding.getCode());
+		// Clone the holding because the date is about to be set to null.
+		// This is to keep track of when it was borrowed.
+		this.history.addHistoryRecord(new HistoryRecord((Holding) holding
+				.clone(), holding.getDefaultLoanFee() + fee));
 
-   }
+		// Set the date to null (this puts the item state in 'not on loan').
+		holding.setBorrowDate(null);
+		// Remove any late fees incurred.
+		this.calculateRemainingCredit(fee);
+		this.currentLoans.remove(holding.getCode());
 
-   // /////////////////////////////////////////////////////////////////
-   // Member implementation //////////////////////////////////////////
-   // /////////////////////////////////////////////////////////////////
+	}
 
-   @Override
-   public int calculateRemainingCredit(int creditToSubtract)
-   {
+	// /////////////////////////////////////////////////////////////////
+	// Member implementation //////////////////////////////////////////
+	// /////////////////////////////////////////////////////////////////
 
-      this.remainingCredit -= creditToSubtract;
+	@Override
+	public int calculateRemainingCredit(int creditToSubtract) {
 
-      return this.remainingCredit;
+		this.remainingCredit -= creditToSubtract;
 
-   }
+		return this.remainingCredit;
 
-   @Override
-   public String getType()
-   {
+	}
 
-      return this.type;
+	@Override
+	public String getType() {
 
-   }
+		return this.type;
 
-   @Override
-   public int getRemainingCredit()
-   {
+	}
 
-      return this.remainingCredit;
+	@Override
+	public int getRemainingCredit() {
 
-   }
+		return this.remainingCredit;
 
-   @Override
-   public BorrowingHistory getBorrowingHistory()
-   {
+	}
 
-      return this.history;
+	@Override
+	public BorrowingHistory getBorrowingHistory() {
 
-   }
+		return this.history;
 
-   @Override
-   public Holding[] getCurrentHoldings()
-   {
+	}
 
-      // Only return an array if the list isn't empty.
-      return this.currentLoans.size() == 0 ? null : this.currentLoans.values()
-               .toArray(new Holding[this.currentLoans.size()]);
+	@Override
+	public Holding[] getCurrentHoldings() {
 
-   }
+		// Only return an array if the list isn't empty.
+		return this.currentLoans.size() == 0 ? null : this.currentLoans
+				.values().toArray(new Holding[this.currentLoans.size()]);
 
-   @Override
-   public String getFullName()
-   {
+	}
 
-      return this.fullName;
+	@Override
+	public String getFullName() {
 
-   }
+		return this.fullName;
 
-   @Override
-   public int getMaxCredit()
-   {
+	}
 
-      return this.maxCredit;
+	@Override
+	public int getMaxCredit() {
 
-   }
+		return this.maxCredit;
 
-   @Override
-   public String getMemberId()
-   {
+	}
 
-      return this.id;
+	@Override
+	public String getMemberId() {
 
-   }
+		return this.id;
 
-   @Override
-   public void resetCredit()
-   {
+	}
 
-      this.remainingCredit = this.maxCredit;
+	@Override
+	public void resetCredit() {
 
-   }
+		this.remainingCredit = this.maxCredit;
 
-   // /////////////////////////////////////////////////////////////////
-   // Object /////////////////////////////////////////////////////////
-   // /////////////////////////////////////////////////////////////////
+	}
 
-   @Override
-   public String toString()
-   {
+	// /////////////////////////////////////////////////////////////////
+	// Object /////////////////////////////////////////////////////////
+	// /////////////////////////////////////////////////////////////////
 
-      return String.format("%s:%s:%s", this.id, this.fullName,
-                           this.remainingCredit);
+	@Override
+	public String toString() {
 
-   }
+		return String.format("%s:%s:%s", this.id, this.fullName,
+				this.remainingCredit);
+
+	}
 
 }

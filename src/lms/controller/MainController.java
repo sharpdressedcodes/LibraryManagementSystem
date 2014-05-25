@@ -8,6 +8,11 @@ import java.util.List;
 import lms.model.grid.listener.GridListener;
 import lms.view.MainView;
 
+/**
+ * @author Greg Kappatos
+ * @date 25 May 2014
+ * 
+ */
 public class MainController extends WindowAdapter {
 
 	//private LMSModel model;
@@ -19,7 +24,7 @@ public class MainController extends WindowAdapter {
 		
 		//this.mainView = view;
 		//this.model = this.mainView.getModel();
-		this.helper = new Controller(view);
+		helper = new Controller(view);
 		gridListeners = new ArrayList<GridListener>();
 		
 	}
@@ -32,11 +37,9 @@ public class MainController extends WindowAdapter {
 	
 	public void removeGridListener(GridListener listener){
 		
-		try {
-			
-			gridListeners.remove(listener);
-			
-		} catch (Exception ex){}
+		// Only remove the listener if it exists.
+		if (gridListeners.contains(listener))
+			gridListeners.remove(listener);		
 		
 	}
 	
@@ -54,6 +57,7 @@ public class MainController extends WindowAdapter {
 	
 	public void notifyGridListeners(GridListener.GridState state){
 		
+		// Tell all interested parties that the grid state has changed.
 		for (GridListener listener : gridListeners)
 			listener.gridChanged(state);
 		
@@ -61,7 +65,7 @@ public class MainController extends WindowAdapter {
 	
 	public void handleExitAction(WindowEvent e){
 		
-		this.helper.handleExitAction();
+		helper.handleExitAction();
 		
 	}
 
@@ -69,6 +73,7 @@ public class MainController extends WindowAdapter {
 	@Override
 	public void windowClosing(WindowEvent e){
 		
+		// Pass the buck to the helper.
 		handleExitAction(e);
 		
 	}

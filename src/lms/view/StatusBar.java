@@ -1,8 +1,14 @@
 package lms.view;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.FlowLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
+/**
+ * @author Greg Kappatos
+ * @date 25 May 2014
+ * 
+ */
 @SuppressWarnings("serial")
 public class StatusBar extends JPanel {
 
@@ -12,31 +18,34 @@ public class StatusBar extends JPanel {
 	public StatusBar(MainView view) {
 		
 		//this.mainView = view;				
-		this.label = new JLabel("");
+		label = new JLabel("");
 		
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
-		this.add(this.label);
+		// Set appearance.
+		setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+		// Add component.
+		add(label);
 		
 	}
 	
 	public String getText(){
 		
-		return this.label.getText();
+		return label.getText();
 		
 	}
 	public void setText(String newValue){
 		
-		this.label.setText(newValue);
+		label.setText(newValue);
 		
 	}
 	public String getToolTipText(){
 		
-		return this.label.getToolTipText();
+		return label.getToolTipText();
 		
 	}
 	public void setToolTipText(String newValue){
 		
-		this.label.setToolTipText(newValue);
+		label.setToolTipText(newValue);
 		
 	}
 

@@ -1,129 +1,146 @@
 package lms.view;
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import lms.controller.Controller;
 import lms.controller.ToolBarButtonsController;
 import lms.controller.ToolBarOptionsController;
 
+/**
+ * @author Greg Kappatos
+ * @date 25 May 2014
+ * 
+ */
 @SuppressWarnings("serial")
 public class ToolBar extends JPanel {
 
+	// Panels.
 	private JPanel leftPanel;
 	private JPanel rightPanel;
 	private JPanel rightLowerPanel;
 	
+	// Buttons.
 	private JButton cmdInit;
 	private JButton cmdAddBook;
 	private JButton cmdRemoveBook;
 	private JButton cmdAddVideo;
 	private JButton cmdRemoveVideo;	
 	
+	// Sort Order.
 	private JLabel lblTitle;
 	private ButtonGroup pnlOpt;
 	private JRadioButton optNone;
 	private JRadioButton optCode;
 	private JRadioButton optType;
 	
+	// Main components.
 	private MainView mainView;
 	private ToolBarButtonsController buttonController;
 	private ToolBarOptionsController optionsController;
 	
 	public ToolBar(MainView view) {
-		
-		// Set class variables
-		this.mainView = view;
+				
+		mainView = view;
 		
 		// Create components.
-		this.leftPanel = new JPanel();
-		this.rightPanel = new JPanel();
-		this.rightLowerPanel = new JPanel();
+		leftPanel = new JPanel();
+		rightPanel = new JPanel();
+		rightLowerPanel = new JPanel();
 		
-		this.cmdInit = new JButton(new ImageIcon(getClass().getResource("/img/collection.png")));
-		this.cmdAddBook = new JButton(new ImageIcon(getClass().getResource("/img/book_add.png")));
-		this.cmdRemoveBook = new JButton(new ImageIcon(getClass().getResource("/img/book_delete.png")));
-		this.cmdAddVideo = new JButton(new ImageIcon(getClass().getResource("/img/film_add.png")));
-		this.cmdRemoveVideo = new JButton(new ImageIcon(getClass().getResource("/img/film_delete.png")));		
+		// Create buttons.
+		cmdInit = new JButton(new ImageIcon(getClass().getResource("/img/collection.png")));
+		cmdAddBook = new JButton(new ImageIcon(getClass().getResource("/img/book_add.png")));
+		cmdRemoveBook = new JButton(new ImageIcon(getClass().getResource("/img/book_delete.png")));
+		cmdAddVideo = new JButton(new ImageIcon(getClass().getResource("/img/film_add.png")));
+		cmdRemoveVideo = new JButton(new ImageIcon(getClass().getResource("/img/film_delete.png")));		
 		
-		this.lblTitle = new JLabel("Sort Order");
-		this.optNone = new JRadioButton("None");
-		this.optCode = new JRadioButton("Code");
-		this.optType = new JRadioButton("Type");
-		this.pnlOpt = new ButtonGroup();
+		// Create labels.
+		lblTitle = new JLabel("Sort Order");
+		optNone = new JRadioButton("None");
+		optCode = new JRadioButton("Code");
+		optType = new JRadioButton("Type");
+		pnlOpt = new ButtonGroup();
 		
-		this.buttonController = new ToolBarButtonsController(this);
-		this.optionsController = new ToolBarOptionsController(this);
+		// Create controllers.
+		buttonController = new ToolBarButtonsController(this);
+		optionsController = new ToolBarOptionsController(this);
 
 		// Set ToolTips.
-		this.cmdInit.setToolTipText("Init/Reset");
-		this.cmdAddBook.setToolTipText("Add Book");
-		this.cmdRemoveBook.setToolTipText("Remove Book");
-		this.cmdAddVideo.setToolTipText("Add Video");
-		this.cmdRemoveVideo.setToolTipText("Remove Video");
+		cmdInit.setToolTipText("Init/Reset");
+		cmdAddBook.setToolTipText("Add Book");
+		cmdRemoveBook.setToolTipText("Remove Book");
+		cmdAddVideo.setToolTipText("Add Video");
+		cmdRemoveVideo.setToolTipText("Remove Video");
 		
 		// Set default option.
-		this.optNone.setSelected(true);
+		optNone.setSelected(true);
 		
-		this.optNone.setMnemonic('N');
-		this.optCode.setMnemonic('C');
-		this.optType.setMnemonic('T');
+		// Set mnemonics.
+		optNone.setMnemonic('N');
+		optCode.setMnemonic('C');
+		optType.setMnemonic('T');
 							
 		// Set appropriate layouts.
-		this.setLayout(new BorderLayout());
-		this.rightPanel.setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
+		rightPanel.setLayout(new BorderLayout());
 		
 		// Add components to left panel.
-		this.leftPanel.add(this.cmdInit);
-		this.leftPanel.add(this.cmdAddBook);
-		this.leftPanel.add(this.cmdRemoveBook);
-		this.leftPanel.add(this.cmdAddVideo);
-		this.leftPanel.add(this.cmdRemoveVideo);
+		leftPanel.add(cmdInit);
+		leftPanel.add(cmdAddBook);
+		leftPanel.add(cmdRemoveBook);
+		leftPanel.add(cmdAddVideo);
+		leftPanel.add(cmdRemoveVideo);
 		
 		// Group radio buttons.
-		this.pnlOpt.add(this.optNone);
-		this.pnlOpt.add(this.optCode);
-		this.pnlOpt.add(this.optType);		
+		pnlOpt.add(optNone);
+		pnlOpt.add(optCode);
+		pnlOpt.add(optType);		
 		
 		// Add components to right panel.
-		this.rightLowerPanel.add(this.optNone);
-		this.rightLowerPanel.add(this.optCode);
-		this.rightLowerPanel.add(this.optType);
+		rightLowerPanel.add(optNone);
+		rightLowerPanel.add(optCode);
+		rightLowerPanel.add(optType);
 		
-		this.rightPanel.add(this.lblTitle, BorderLayout.NORTH);	
-		this.rightPanel.add(this.rightLowerPanel, BorderLayout.SOUTH);
+		rightPanel.add(lblTitle, BorderLayout.NORTH);	
+		rightPanel.add(rightLowerPanel, BorderLayout.SOUTH);
 		
-		this.add(this.leftPanel, BorderLayout.WEST);
-		this.add(this.rightPanel, BorderLayout.EAST);
+		add(leftPanel, BorderLayout.WEST);
+		add(rightPanel, BorderLayout.EAST);
 				
-		this.cmdInit.setActionCommand(Controller.Actions.init.name());
-		this.cmdAddBook.setActionCommand(Controller.Actions.addBook.name());
-		this.cmdRemoveBook.setActionCommand(Controller.Actions.removeBook.name());
-		this.cmdAddVideo.setActionCommand(Controller.Actions.addVideo.name());
-		this.cmdRemoveVideo.setActionCommand(Controller.Actions.removeVideo.name());
+		// Set action commands.
+		cmdInit.setActionCommand(Controller.Actions.init.name());
+		cmdAddBook.setActionCommand(Controller.Actions.addBook.name());
+		cmdRemoveBook.setActionCommand(Controller.Actions.removeBook.name());
+		cmdAddVideo.setActionCommand(Controller.Actions.addVideo.name());
+		cmdRemoveVideo.setActionCommand(Controller.Actions.removeVideo.name());
 				
 		// Add Button listeners.
-		this.cmdInit.addActionListener(this.buttonController);
-		this.cmdAddBook.addActionListener(this.buttonController);
-		this.cmdRemoveBook.addActionListener(this.buttonController);
-		this.cmdAddVideo.addActionListener(this.buttonController);
-		this.cmdRemoveVideo.addActionListener(this.buttonController);
+		cmdInit.addActionListener(buttonController);
+		cmdAddBook.addActionListener(buttonController);
+		cmdRemoveBook.addActionListener(buttonController);
+		cmdAddVideo.addActionListener(buttonController);
+		cmdRemoveVideo.addActionListener(buttonController);
 		
-		this.optNone.setActionCommand(ToolBarOptionsController.SortActions.none.name());
-		this.optCode.setActionCommand(ToolBarOptionsController.SortActions.code.name());
-		this.optType.setActionCommand(ToolBarOptionsController.SortActions.type.name());
+		// Set action commands.
+		optNone.setActionCommand(ToolBarOptionsController.SortActions.none.name());
+		optCode.setActionCommand(ToolBarOptionsController.SortActions.code.name());
+		optType.setActionCommand(ToolBarOptionsController.SortActions.type.name());
 		
 		// Add RadioButton listeners.
-		this.optNone.addActionListener(this.optionsController);
-		this.optCode.addActionListener(this.optionsController);
-		this.optType.addActionListener(this.optionsController);
-				
-		//LMSModel model = this.mainView.getModel();				
+		optNone.addActionListener(optionsController);
+		optCode.addActionListener(optionsController);
+		optType.addActionListener(optionsController);				
 		
 	}
 
 	public MainView getMainView(){
 
-		return this.mainView;
+		return mainView;
 		
 	}
 	
