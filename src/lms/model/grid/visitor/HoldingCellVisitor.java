@@ -1,12 +1,13 @@
-package lms.model.grid.cells.visitor;
+package lms.model.grid.visitor;
 
-import java.util.LinkedHashMap;
-import lms.view.grid.cells.*;
+import java.util.*;
+
+import lms.view.grid.*;
 
 public class HoldingCellVisitor implements Visitor {
 
-	private LinkedHashMap<Integer, HoldingCell> holdingCells;
-	private LinkedHashMap<Integer, EmptyCell> emptyCells;
+	private Map<Integer, HoldingCell> holdingCells;
+	private Map<Integer, EmptyCell> emptyCells;
 	
 	public HoldingCellVisitor() {
 		

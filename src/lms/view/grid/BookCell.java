@@ -1,15 +1,17 @@
-package lms.view.grid.cells;
+package lms.view.grid;
 
 import java.awt.Color;
 import javax.swing.BorderFactory;
+import lms.model.Book;
 
 @SuppressWarnings("serial")
 public class BookCell extends HoldingCell {	
 	
-	public BookCell(String holdingInfo){
+	public BookCell(Book model){
 						
-		super(holdingInfo);
-		this.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
+		super(model);
+		
+		setBorder(BorderFactory.createLineBorder(Color.BLUE, DEFAULT_BORDER_SIZE));
 		
 	}
 	

@@ -1,4 +1,4 @@
-package lms.model.visitor;
+package lms.model.holding.visitor;
 
 public interface Visitable {
 

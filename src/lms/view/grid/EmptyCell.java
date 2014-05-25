@@ -1,15 +1,16 @@
-package lms.view.grid.cells;
+package lms.view.grid;
 
 import java.awt.Color;
-import lms.model.grid.cells.visitor.Visitable;
-import lms.model.grid.cells.visitor.Visitor;
+
+import lms.model.grid.visitor.Visitable;
+import lms.model.grid.visitor.Visitor;
 
 @SuppressWarnings("serial")
 public class EmptyCell extends GridCell implements Visitable {
 
 	public EmptyCell(){
 		
-		this.setBackground(Color.WHITE);
+		setBackground(Color.WHITE);
 		
 	}
 

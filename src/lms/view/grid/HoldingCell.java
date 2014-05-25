@@ -1,59 +1,52 @@
-package lms.view.grid.cells;
+package lms.view.grid;
 
 import java.awt.*;
-import java.util.Comparator;
-
+import java.util.*;
 import javax.swing.*;
-
-import lms.model.grid.cells.visitor.Visitable;
-import lms.model.grid.cells.visitor.Visitor;
+import lms.model.Holding;
+import lms.model.grid.visitor.*;
 
 @SuppressWarnings("serial")
 public abstract class HoldingCell extends GridCell implements Visitable {
 
-	private String holdingInfo;
 	private JLabel lbl;
-	private String holdingId;
-	private String holdingType;
+	private Holding model;
 		
+	public static final int DEFAULT_BORDER_SIZE = 3;
 	public static final String DEFAULT_FORMAT = "<html>Holding ID: %s<br><br>Title: %s<br><br>Standard Loan Fee: %s<br><br>Loan Period: %s</html>";
 	
-	public HoldingCell(String holdingInfo){
+	public HoldingCell(Holding model){
 		
-		this.setBackground(Color.GRAY);
+		this.model = model;	
 		
-		this.holdingInfo = this.parseHoldingInfo(holdingInfo);
-		this.lbl = new JLabel(this.holdingInfo);
-		this.lbl.setBorder(BorderFactory.createEmptyBorder(1, 5, 1, 5));
-		
-		this.setLayout(new BorderLayout());
+		lbl = new JLabel(createInfoFromModel());
+		lbl.setBorder(BorderFactory.createEmptyBorder(1, 5, 1, 5));				
 		
 		JScrollPane scroller = new JScrollPane(
-				this.lbl, 
+				lbl, 
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED
 		);		
 		scroller.getViewport().setBackground(Color.GRAY);
 		scroller.setBorder(null);
 		
-		this.add(scroller);
+		setBackground(Color.GRAY);
+		setLayout(new BorderLayout());
+		
+		add(scroller);
 		
 	}
 	
 	public JLabel getLabel(){
 		
-		return this.lbl;
+		return lbl;
 		
 	}
-	public String getHoldingId(){
+	
+	public Holding getModel(){
 		
-		return this.holdingId;
+		return model;
 		
-	}
-	public String getHoldingType() {
-
-		return this.holdingType;
-
 	}
 	
 	public static Comparator<HoldingCell> CodeComparator = new Comparator<HoldingCell>(){
@@ -61,8 +54,9 @@ public abstract class HoldingCell extends GridCell implements Visitable {
 		@Override
 		public int compare(HoldingCell cell1, HoldingCell cell2) {
 
-			String code1 = cell1.getHoldingId().toLowerCase();
-			String code2 = cell2.getHoldingId().toLowerCase();
+
+			Integer code1 = cell1.getModel().getCode();
+			Integer code2 = cell2.getModel().getCode();
 			
 			// ascending order
 			return code1.compareTo(code2);
@@ -76,8 +70,8 @@ public abstract class HoldingCell extends GridCell implements Visitable {
 		@Override
 		public int compare(HoldingCell cell1, HoldingCell cell2) {
 
-			String code1 = cell1.getHoldingType().toLowerCase();
-			String code2 = cell2.getHoldingType().toLowerCase();
+			String code1 = cell1.getModel().getType().toLowerCase();
+			String code2 = cell2.getModel().getType().toLowerCase();
 			
 			// ascending order
 			return code1.compareTo(code2);
@@ -86,38 +80,19 @@ public abstract class HoldingCell extends GridCell implements Visitable {
 					
 	};
 	
-	private String parseHoldingInfo(String holdingInfo){
-		
-		String holdingId, holdingTitle, holdingFee, holdingPeriod;
-		
-		// Have to parse it this way in case the Holding Title has : in it
-		// Strip off start
-		int pos = holdingInfo.indexOf(":");
-		holdingId = holdingInfo.substring(0, pos);
-		holdingInfo = holdingInfo.substring(pos + 1);
-		
-		// Then work from the end, trimming off each part as we go.
-		pos = holdingInfo.lastIndexOf(":");
-		this.holdingType = holdingInfo.substring(pos + 1);
-		holdingInfo = holdingInfo.substring(0, pos);
-		
-		pos = holdingInfo.lastIndexOf(":");
-		holdingPeriod = holdingInfo.substring(pos + 1);
-		holdingInfo = holdingInfo.substring(0, pos);
-		
-		pos = holdingInfo.lastIndexOf(":");
-		holdingFee = holdingInfo.substring(pos + 1);
-		holdingTitle = holdingInfo.substring(0, pos);
-		
-		this.holdingId = holdingId;
+	private String createInfoFromModel(){
 		
 		return String.format(
 				DEFAULT_FORMAT, 
-				holdingId, holdingTitle, holdingFee, holdingPeriod
+				model.getCode(), 
+				model.getTitle(), 
+				model.getDefaultLoanFee(), 
+				model.getMaxLoanPeriod()
 		);
 		
 	}
 
+	// Visitable implementation.
 	@Override
 	public void accept(Visitor visitor) {
 		

@@ -4,8 +4,8 @@ package lms.model;
  * @author Greg Kappatos
  */
 
+import lms.model.holding.visitor.Visitor;
 import lms.model.util.DateUtil;
-import lms.model.visitor.Visitor;
 
 public class Book extends AbstractHolding
 {

@@ -6,7 +6,7 @@ package lms.model;
 
 import java.util.*;
 
-import lms.model.visitor.HoldingVisitor;
+import lms.model.holding.visitor.HoldingVisitor;
 
 public class LibraryCollection
 {

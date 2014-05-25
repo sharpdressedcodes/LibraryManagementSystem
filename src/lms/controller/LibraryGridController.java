@@ -5,7 +5,7 @@ import java.awt.event.*;
 import javax.swing.JLabel;
 
 import lms.view.MainView;
-import lms.view.grid.cells.*;
+import lms.view.grid.*;
 
 public class LibraryGridController extends MouseAdapter {
 
@@ -32,7 +32,7 @@ public class LibraryGridController extends MouseAdapter {
 		JLabel source = (JLabel)e.getSource();
 		HoldingCell cell = (HoldingCell)source.getParent().getParent().getParent();
 				
-		helper.removeHolding(Integer.parseInt(cell.getHoldingId()));			
+		helper.removeHolding(cell.getModel().getCode());			
 		
 	}
 

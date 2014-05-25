@@ -11,8 +11,8 @@ import lms.controller.MainController;
 import lms.controller.ToolBarOptionsController;
 import lms.model.facade.LMSModel;
 import lms.model.grid.listener.GridListener.GridState;
-import lms.view.grid.cells.EmptyCell;
-import lms.view.grid.cells.GridCell;
+import lms.view.grid.EmptyCell;
+import lms.view.grid.GridCell;
 
 @SuppressWarnings("serial")
 public class MainView extends JFrame {

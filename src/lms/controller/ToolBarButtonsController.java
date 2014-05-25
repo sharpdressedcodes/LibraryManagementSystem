@@ -2,11 +2,9 @@ package lms.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import lms.model.Holding;
 import lms.model.facade.LMSModel;
 import lms.model.grid.listener.GridListener;
-import lms.model.grid.listener.GridListener.GridState;
 import lms.view.MainView;
 import lms.view.ToolBar;
 

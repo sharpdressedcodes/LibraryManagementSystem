@@ -1,6 +1,6 @@
 package lms.model;
 
-import lms.model.visitor.Visitor;
+import lms.model.holding.visitor.Visitor;
 
 /**
  * @author Greg Kappatos

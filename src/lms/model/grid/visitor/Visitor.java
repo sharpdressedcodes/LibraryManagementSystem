@@ -1,6 +1,6 @@
-package lms.model.grid.cells.visitor;
+package lms.model.grid.visitor;
 
-import lms.view.grid.cells.*;
+import lms.view.grid.*;
 
 public interface Visitor {
 

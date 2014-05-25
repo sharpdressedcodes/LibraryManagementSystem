@@ -1,15 +1,16 @@
-package lms.model.visitor;
+package lms.model.holding.visitor;
 
-import java.util.LinkedHashMap;
+import java.util.*;
+
 import lms.model.Book;
 import lms.model.Video;
-import lms.view.grid.cells.*;
+import lms.view.grid.*;
 
 public class HoldingVisitor implements Visitor {
 
-	private LinkedHashMap<Integer, Book> books;
-	private LinkedHashMap<Integer, Video> videos;
-	private LinkedHashMap<Integer, GridCell> cells;
+	private Map<Integer, Book> books;
+	private Map<Integer, Video> videos;
+	private Map<Integer, GridCell> cells;
 	
 	public HoldingVisitor() {
 		
@@ -49,14 +50,14 @@ public class HoldingVisitor implements Visitor {
 	public void visit(Book book) {
 				
 		books.put(books.size(), book);
-		cells.put(cells.size(), new BookCell(book.toString()));
+		cells.put(cells.size(), new BookCell(book));
 
 	}
 	@Override
 	public void visit(Video video) {
 		
 		videos.put(videos.size(), video);
-		cells.put(cells.size(), new VideoCell(video.toString()));
+		cells.put(cells.size(), new VideoCell(video));
 
 	}
 

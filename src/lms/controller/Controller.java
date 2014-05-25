@@ -10,10 +10,10 @@ import lms.model.LibraryCollection;
 import lms.model.Video;
 import lms.model.facade.LMSModel;
 import lms.model.grid.listener.GridListener.GridState;
-import lms.model.visitor.HoldingVisitor;
+import lms.model.holding.visitor.HoldingVisitor;
 import lms.view.MainView;
 import lms.view.dialog.*;
-import lms.view.grid.cells.*;
+import lms.view.grid.*;
 import lms.view.test.Tester;
 
 public class Controller {

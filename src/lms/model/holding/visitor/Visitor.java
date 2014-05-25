@@ -1,4 +1,4 @@
-package lms.model.visitor;
+package lms.model.holding.visitor;
 
 import lms.model.Book;
 import lms.model.Video;

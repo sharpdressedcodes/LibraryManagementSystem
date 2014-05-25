@@ -5,8 +5,8 @@ import java.awt.*;
 import javax.swing.JPanel;
 
 import lms.controller.LibraryGridController;
-import lms.model.grid.cells.visitor.HoldingCellVisitor;
-import lms.view.grid.cells.*;
+import lms.model.grid.visitor.HoldingCellVisitor;
+import lms.view.grid.*;
 
 @SuppressWarnings("serial")
 public class LibraryGrid extends JPanel {

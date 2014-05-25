@@ -1,4 +1,4 @@
-package lms.model.grid.cells.visitor;
+package lms.model.grid.visitor;
 
 public interface Visitable {
 
