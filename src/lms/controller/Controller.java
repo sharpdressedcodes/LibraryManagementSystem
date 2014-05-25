@@ -55,7 +55,11 @@ public class Controller {
 		
 	    String code = "";
         String title = "";
-		AddHoldingDialog dialog = new AddHoldingDialog(mainView, "Book");						
+		AddHoldingDialog dialog = new AddHoldingDialog(
+			mainView, 
+			"Book", 
+			new String[] {"10"}
+		);						
 		
 		// Keep looping until user either cancels or adds valid data.
 		while (dialog.getResult().equals(AbstractDialog.Actions.OK)){

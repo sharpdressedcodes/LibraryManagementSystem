@@ -69,9 +69,13 @@ public class AddHoldingDialog extends FieldsDialog {
 		addField(lblTitle, txtTitle, new JLabel("All chars allowed. Min: 3"));
 		
 		// If this holding has multiple selections for fees, show it.
-		if (holdingFees != null)
+		if (holdingFees != null){
 			addField(lblFee, cboFee, new JLabel("Australian Dollars (AUD)"));
-	
+			// Disable the component if only 1 value is present.
+			if (cboFee.getItemCount() == 1)
+				cboFee.setEnabled(false);
+		}
+		
 		display();
 		
 	}
